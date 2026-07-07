@@ -13,21 +13,21 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
+using System.Data.SQLite;
 
 
 namespace Corner_Application
 {
     public partial class LoginForm : Form
     {
-        private MySqlConnection _connect;
-        MySqlCommand cmd = new MySqlCommand();
+        private SQLiteConnection _connect;
+        SQLiteCommand cmd = new SQLiteCommand();
 
         void dbConnection()
         {
             try
             {
-                _connect = new MySqlConnection(Program.Constring);
+                _connect = new SQLiteConnection(Program.Constring);
                 _connect.Open();
             }
             catch (Exception e)
@@ -74,25 +74,41 @@ namespace Corner_Application
 
             try
             {
-                dbConnection();                
+                dbConnection();
                 cmd.Connection = _connect;
-                cmd.CommandText = "Select * from `login` where 	username='"+textBox1.Text +"' and Pass ='"+ textBox2.Text+"'; ";
+                cmd.Parameters.Clear();
+                cmd.CommandText = "Select * from login where username = @username;";
+                cmd.Parameters.AddWithValue("@username", textBox1.Text);
 
-                //MySqlDataReader reader = cmd.ExecuteReader();
-                MySqlDataAdapter mySqlDataAdapterlogin = new MySqlDataAdapter { SelectCommand = cmd };
+                SQLiteDataAdapter mySqlDataAdapterlogin = new SQLiteDataAdapter { SelectCommand = cmd };
                 DataTable dTableLogin = new DataTable();
                 mySqlDataAdapterlogin.Fill(dTableLogin);
-                
+
                 _connect.Close();
+
+                // Verify the typed password against the stored PBKDF2 hash (never plaintext).
+                bool passwordOk = false;
                 if (dTableLogin.Rows.Count == 1)
+                {
+                    string storedPass = Convert.ToString(dTableLogin.Rows[0]["Pass"]);
+                    passwordOk = Security.Verify(textBox2.Text, storedPass);
+                    // Transparently upgrade a legacy plaintext row to a hash on success.
+                    if (passwordOk && Security.IsLegacyPlaintext(storedPass))
+                    {
+                        UpgradePasswordHash(Convert.ToString(dTableLogin.Rows[0]["id"]), textBox2.Text);
+                    }
+                }
+
+                if (dTableLogin.Rows.Count == 1 && passwordOk)
                 {
                     string now;
                     now = DateTime.Now.ToString("s");
                     dt = Convert.ToString(now);
                     dbConnection();
                     cmd.Connection = _connect;
-                    cmd.CommandText = "Select * from `user_shift` ; " ;
-                    MySqlDataAdapter mySqlDataAdapterUserShify = new MySqlDataAdapter { SelectCommand = cmd };
+                    cmd.Parameters.Clear();
+                    cmd.CommandText = "Select * from user_shift;";
+                    SQLiteDataAdapter mySqlDataAdapterUserShify = new SQLiteDataAdapter { SelectCommand = cmd };
                     DataTable dTableUserShift = new DataTable();
                     mySqlDataAdapterUserShify.Fill(dTableUserShift);
                     _connect.Close();
@@ -133,10 +149,12 @@ namespace Corner_Application
                                 sh = maxShiftN + 1;
                                 dbConnection();
                                 cmd.Connection = _connect;
-                                cmd.CommandText = "INSERT INTO `corner`.`user_shift`( `UserName`, `ShiftNumber`) VALUES ('" +
-                                    Convert.ToString(rowdel["userName"]) +  "' , '"+ sh +"');";
-                                MySqlDataReader reader3 = cmd.ExecuteReader();
-                                _connect.Close(); 
+                                cmd.Parameters.Clear();
+                                cmd.CommandText = "INSERT INTO user_shift (UserName, ShiftNumber) VALUES (@userName, @shiftNumber);";
+                                cmd.Parameters.AddWithValue("@userName", Convert.ToString(rowdel["userName"]));
+                                cmd.Parameters.AddWithValue("@shiftNumber", sh);
+                                cmd.ExecuteNonQuery();
+                                _connect.Close();
                                 
                             }
 
@@ -173,8 +191,31 @@ namespace Corner_Application
 
         }
 
-
-      
+        /// <summary>
+        /// One-time migration: replace a legacy plaintext password with its PBKDF2 hash
+        /// after the user authenticates successfully with it. Non-fatal on failure.
+        /// </summary>
+        private void UpgradePasswordHash(string userId, string plaintext)
+        {
+            try
+            {
+                using (var conn = new SQLiteConnection(Program.Constring))
+                {
+                    conn.Open();
+                    using (var upd = new SQLiteCommand(
+                        "UPDATE login SET Pass = @pass WHERE id = @id;", conn))
+                    {
+                        upd.Parameters.AddWithValue("@pass", Security.Hash(plaintext));
+                        upd.Parameters.AddWithValue("@id", userId);
+                        upd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch
+            {
+                // Login still succeeds even if the re-hash can't be persisted.
+            }
+        }
 
     }
 }

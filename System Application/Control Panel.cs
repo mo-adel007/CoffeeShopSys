@@ -7,20 +7,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
+using System.Data.SQLite;
 
 namespace Corner_Application
 {
     public partial class Control_Panel : Form
     {
-        private MySqlConnection _connect;
-        MySqlCommand cmd = new MySqlCommand();
+        private SQLiteConnection _connect;
+        SQLiteCommand cmd = new SQLiteCommand();
 
         void dbConnection()
         {
             try
             {
-                _connect = new MySqlConnection(Program.Constring);
+                _connect = new SQLiteConnection(Program.Constring);
                 _connect.Open();
             }
             catch (Exception e)
@@ -85,9 +85,10 @@ namespace Corner_Application
             {
                 dbConnection();
                 cmd.Connection = _connect;
+                cmd.Parameters.Clear();
                 cmd.CommandText =
-                    "SELECT  `day_details`.`DayNum`,`day_details`.`TotalSell`,`day_details`.`TotalBuy`,`day_details`.`ProfitDay` FROM `corner`.`day_details`;";
-                MySqlDataAdapter mySqlDataAdapterUserShify = new MySqlDataAdapter {SelectCommand = cmd};
+                    "SELECT  day_details.DayNum,day_details.TotalSell,day_details.TotalBuy,day_details.ProfitDay FROM day_details;";
+                SQLiteDataAdapter mySqlDataAdapterUserShify = new SQLiteDataAdapter {SelectCommand = cmd};
                 DataTable dTableUserShift = new DataTable();
                 mySqlDataAdapterUserShify.Fill(dTableUserShift);
                 _connect.Close();
@@ -114,8 +115,9 @@ namespace Corner_Application
 
                 dbConnection();
                 cmd.Connection = _connect;
-                cmd.CommandText = "Select `expens_name`,`Price` from `monthly_expenses` ; ";
-                MySqlDataAdapter mySqlDataAdapterExpences = new MySqlDataAdapter {SelectCommand = cmd};
+                cmd.Parameters.Clear();
+                cmd.CommandText = "Select expens_name,Price from monthly_expenses ; ";
+                SQLiteDataAdapter mySqlDataAdapterExpences = new SQLiteDataAdapter {SelectCommand = cmd};
                 DataTable dTableUserExpences = new DataTable();
                 mySqlDataAdapterExpences.Fill(dTableUserExpences);
                 _connect.Close();
@@ -185,9 +187,10 @@ namespace Corner_Application
                 dataGridView3.Hide();
                 dbConnection();
                 cmd.Connection = _connect;
-                cmd.CommandText = "Select `Product_id`,`Product_name`,`Price`,`Store` ,`ProductType_id` from `product` ; ";
+                cmd.Parameters.Clear();
+                cmd.CommandText = "Select Product_id,Product_name,Price,Store ,ProductType_id from product ; ";
 
-                MySqlDataAdapter mySqlDataAdapterlogin = new MySqlDataAdapter {SelectCommand = cmd};
+                SQLiteDataAdapter mySqlDataAdapterlogin = new SQLiteDataAdapter {SelectCommand = cmd};
                 DataTable dTableLogin = new DataTable();
                 mySqlDataAdapterlogin.Fill(dTableLogin);
 
@@ -214,9 +217,10 @@ namespace Corner_Application
             {
                 dbConnection();
                 cmd.Connection = _connect;
-                cmd.CommandText = "Select `type_name` from `product_type` ; ";
+                cmd.Parameters.Clear();
+                cmd.CommandText = "Select type_name from product_type ; ";
 
-                MySqlDataAdapter mySqlDataAdapterlogin = new MySqlDataAdapter {SelectCommand = cmd};
+                SQLiteDataAdapter mySqlDataAdapterlogin = new SQLiteDataAdapter {SelectCommand = cmd};
                 DataTable dTableLogin = new DataTable();
                 mySqlDataAdapterlogin.Fill(dTableLogin);
 
@@ -239,9 +243,10 @@ namespace Corner_Application
             {
                 dbConnection();
                 cmd.Connection = _connect;
-                cmd.CommandText = "Select `username`,`Pass` from `login` ; ";
+                cmd.Parameters.Clear();
+                cmd.CommandText = "Select username,Pass from login ; ";
 
-                MySqlDataAdapter mySqlDataAdapterlogin = new MySqlDataAdapter {SelectCommand = cmd};
+                SQLiteDataAdapter mySqlDataAdapterlogin = new SQLiteDataAdapter {SelectCommand = cmd};
                 DataTable dTableLogin = new DataTable();
                 mySqlDataAdapterlogin.Fill(dTableLogin);
 
@@ -250,6 +255,7 @@ namespace Corner_Application
                 dataGridView1.DataSource = dTableLogin;
                 dataGridView1.Columns[0].Width = 250;
                 dataGridView1.Columns[1].Width = 250;
+                dataGridView1.Columns["Pass"].Visible = false;
 
 
                 DataCBoxUsers();
@@ -258,7 +264,7 @@ namespace Corner_Application
                 //cmd.Connection = _connect;
                 //cmd.CommandText = "Select `type_name` from `product_type` ; ";
 
-                //MySqlDataAdapter mySqlDataAdapterPType = new MySqlDataAdapter {SelectCommand = cmd};
+                //SQLiteDataAdapter mySqlDataAdapterPType = new SQLiteDataAdapter {SelectCommand = cmd};
                 //DataTable dTablePType = new DataTable();
                 //mySqlDataAdapterPType.Fill(dTablePType);
 
@@ -323,9 +329,10 @@ namespace Corner_Application
             {
                 dbConnection();
                 cmd.Connection = _connect;
-                cmd.CommandText = "Select `username` from `login` ; ";
+                cmd.Parameters.Clear();
+                cmd.CommandText = "Select username from login ; ";
 
-                MySqlDataAdapter mySqlDataAdapterlogin = new MySqlDataAdapter {SelectCommand = cmd};
+                SQLiteDataAdapter mySqlDataAdapterlogin = new SQLiteDataAdapter {SelectCommand = cmd};
                 DataTable dTableLogin = new DataTable();
                 mySqlDataAdapterlogin.Fill(dTableLogin);
 
@@ -354,9 +361,11 @@ namespace Corner_Application
             {
                 dbConnection();
                 cmd.Connection = _connect;
-                cmd.CommandText = "Select `username`,`Pass` from `login` where 	username='" + username + "'; ";
+                cmd.Parameters.Clear();
+                cmd.CommandText = "Select username from login where username=@username; ";
+                cmd.Parameters.AddWithValue("@username", username);
 
-                MySqlDataAdapter mySqlDataAdapterlogin = new MySqlDataAdapter {SelectCommand = cmd};
+                SQLiteDataAdapter mySqlDataAdapterlogin = new SQLiteDataAdapter {SelectCommand = cmd};
                 DataTable dTableLogin = new DataTable();
                 mySqlDataAdapterlogin.Fill(dTableLogin);
 
@@ -378,7 +387,7 @@ namespace Corner_Application
                         foreach (DataRow rowdel in dTableLogin.Rows)
                         {
                             textBox1.Text = Convert.ToString(rowdel["username"]);
-                            textBox2.Text = Convert.ToString(rowdel["Pass"]);
+                            textBox2.Text = "";
                             textBox1.Visible = true;
                             textBox2.Visible = true;
                         }
@@ -406,9 +415,13 @@ namespace Corner_Application
                     dbConnection();
                     cmd.Connection = _connect;
 
-                    cmd.CommandText = "UPDATE `corner`.`login` SET `username`= '"+ textBox1.Text +"' , `Pass` = '" +textBox2.Text + "' where 	username='" + comboBox2.Text + "'; ";
+                    cmd.Parameters.Clear();
+                    cmd.CommandText = "UPDATE login SET username= @username , Pass = @pass where username=@oldusername; ";
+                    cmd.Parameters.AddWithValue("@username", textBox1.Text);
+                    cmd.Parameters.AddWithValue("@pass", Security.Hash(textBox2.Text));
+                    cmd.Parameters.AddWithValue("@oldusername", comboBox2.Text);
 
-                    MySqlDataReader reader = cmd.ExecuteReader();
+                    cmd.ExecuteNonQuery();
                     _connect.Close();
 
                 }
@@ -425,8 +438,10 @@ namespace Corner_Application
                 {
                     dbConnection();
                     cmd.Connection = _connect;
-                    cmd.CommandText = "select * from `login` where 	username='" + textBox1.Text + "'; ";
-                    MySqlDataReader reader = cmd.ExecuteReader();
+                    cmd.Parameters.Clear();
+                    cmd.CommandText = "select * from login where username=@username; ";
+                    cmd.Parameters.AddWithValue("@username", textBox1.Text);
+                    SQLiteDataReader reader = cmd.ExecuteReader();
                     bool b = reader.Read();
                     
                     _connect.Close();
@@ -441,10 +456,12 @@ namespace Corner_Application
                     {
                         dbConnection();
                         cmd.Connection = _connect;
+                        cmd.Parameters.Clear();
                         cmd.CommandText =
-                            "INSERT INTO `corner`.`login` (`username`,`Pass`) VALUES ('" +
-                            textBox1.Text + "' , '" + textBox2.Text + "') ; ";
-                        MySqlDataReader reader2 = cmd.ExecuteReader();
+                            "INSERT INTO login (username,Pass) VALUES (@username , @pass) ; ";
+                        cmd.Parameters.AddWithValue("@username", textBox1.Text);
+                        cmd.Parameters.AddWithValue("@pass", Security.Hash(textBox2.Text));
+                        cmd.ExecuteNonQuery();
                         _connect.Close();
 
                     }
@@ -462,8 +479,10 @@ namespace Corner_Application
                 {
                     dbConnection();
                     cmd.Connection = _connect;
-                    cmd.CommandText = "DELETE  FROM `corner`.`login` where username='" + comboBox2.Text + "' ; ";
-                    MySqlDataReader reader = cmd.ExecuteReader();
+                    cmd.Parameters.Clear();
+                    cmd.CommandText = "DELETE  FROM login where username=@username ; ";
+                    cmd.Parameters.AddWithValue("@username", comboBox2.Text);
+                    cmd.ExecuteNonQuery();
                     _connect.Close();
 
                 }
@@ -546,8 +565,9 @@ namespace Corner_Application
             {
                 dbConnection();
                 cmd.Connection = _connect;
-                cmd.CommandText = "Select `type_name` from `product_type` ;";
-                MySqlDataAdapter mySqlDataAdaptersell = new MySqlDataAdapter {SelectCommand = cmd};
+                cmd.Parameters.Clear();
+                cmd.CommandText = "Select type_name from product_type ;";
+                SQLiteDataAdapter mySqlDataAdaptersell = new SQLiteDataAdapter {SelectCommand = cmd};
                 DataTable dTableSell = new DataTable();
                 mySqlDataAdaptersell.Fill(dTableSell);
                 _connect.Close();
@@ -585,8 +605,10 @@ namespace Corner_Application
             {
                 dbConnection();
                 cmd.Connection = _connect;
-                cmd.CommandText = "Select `type_name` from `product_type` where type_name='" + typeName + "' ;";
-                MySqlDataAdapter mySqlDataAdaptersell = new MySqlDataAdapter {SelectCommand = cmd};
+                cmd.Parameters.Clear();
+                cmd.CommandText = "Select type_name from product_type where type_name=@typeName ;";
+                cmd.Parameters.AddWithValue("@typeName", typeName);
+                SQLiteDataAdapter mySqlDataAdaptersell = new SQLiteDataAdapter {SelectCommand = cmd};
                 DataTable dTableSell = new DataTable();
                 mySqlDataAdaptersell.Fill(dTableSell);
                 _connect.Close();
@@ -634,11 +656,13 @@ namespace Corner_Application
                     {
                         dbConnection();
                         cmd.Connection = _connect;
-                        cmd.CommandText = "Select * from `product_type` where type_name='" + textBox3.Text + "' ;";
-                        //MySqlDataAdapter mySqlDataAdaptersell = new MySqlDataAdapter {SelectCommand = cmd};
+                        cmd.Parameters.Clear();
+                        cmd.CommandText = "Select * from product_type where type_name=@typeName ;";
+                        cmd.Parameters.AddWithValue("@typeName", textBox3.Text);
+                        //SQLiteDataAdapter mySqlDataAdaptersell = new SQLiteDataAdapter {SelectCommand = cmd};
                         //DataTable dTableSell = new DataTable();
                         //mySqlDataAdaptersell.Fill(dTableSell);
-                        MySqlDataReader reader = cmd.ExecuteReader();
+                        SQLiteDataReader reader = cmd.ExecuteReader();
                         bool b = reader.Read();
                         _connect.Close();
 
@@ -653,8 +677,10 @@ namespace Corner_Application
 
                             dbConnection();
                             cmd.Connection = _connect;
-                            cmd.CommandText = "INSERT INTO `corner`.`product_type`(`type_name`) VALUES('"+textBox3.Text+"'); ";
-                            MySqlDataReader reader2 = cmd.ExecuteReader();
+                            cmd.Parameters.Clear();
+                            cmd.CommandText = "INSERT INTO product_type(type_name) VALUES(@typeName); ";
+                            cmd.Parameters.AddWithValue("@typeName", textBox3.Text);
+                            cmd.ExecuteNonQuery();
                            
                             _connect.Close();
 
@@ -682,23 +708,25 @@ namespace Corner_Application
                         //dbConnection();
                         //cmd.Connection = _connect;
                         //cmd.CommandText = "Select * from `product_type` where type_name='" + comboBox4.Text + "' ;";
-                        ////MySqlDataAdapter mySqlDataAdaptersell = new MySqlDataAdapter {SelectCommand = cmd};
+                        ////SQLiteDataAdapter mySqlDataAdaptersell = new SQLiteDataAdapter {SelectCommand = cmd};
                         ////DataTable dTableSell = new DataTable();
                         ////mySqlDataAdaptersell.Fill(dTableSell);
                         ////_connect.Close();
-                        //MySqlDataReader reader = cmd.ExecuteReader();
+                        //SQLiteDataReader reader = cmd.ExecuteReader();
                         //bool b = reader.Read();
                         //_connect.Close();
 
                         dbConnection();
                         cmd.Connection = _connect;
-                        cmd.CommandText = "Select * from `product_type` where type_name='" + textBox3.Text + "' ;";
-                        //MySqlDataAdapter mySqlDataAdapterThere = new MySqlDataAdapter {SelectCommand = cmd};
+                        cmd.Parameters.Clear();
+                        cmd.CommandText = "Select * from product_type where type_name=@typeName ;";
+                        cmd.Parameters.AddWithValue("@typeName", textBox3.Text);
+                        //SQLiteDataAdapter mySqlDataAdapterThere = new SQLiteDataAdapter {SelectCommand = cmd};
                         //DataTable dTableThere = new DataTable();
                         //mySqlDataAdapterThere.Fill(dTableThere);
 
                         //_connect.Close();
-                        MySqlDataReader reader = cmd.ExecuteReader();
+                        SQLiteDataReader reader = cmd.ExecuteReader();
                         bool a = reader.Read();
                         _connect.Close();
 
@@ -713,10 +741,13 @@ namespace Corner_Application
                             
                                 dbConnection();
                             cmd.Connection = _connect;
+                            cmd.Parameters.Clear();
                             cmd.CommandText =
-                                    "UPDATE `corner`.`product_type` SET `type_name` = '" + textBox3.Text + "' WHERE `type_name` = '" + comboBox4.Text +"' ; ";
+                                    "UPDATE product_type SET type_name = @newType WHERE type_name = @oldType ; ";
+                                cmd.Parameters.AddWithValue("@newType", textBox3.Text);
+                                cmd.Parameters.AddWithValue("@oldType", comboBox4.Text);
 
-                                MySqlDataReader reader4 = cmd.ExecuteReader();
+                                cmd.ExecuteNonQuery();
                                 _connect.Close();
 
                         }
@@ -735,8 +766,10 @@ namespace Corner_Application
                 {
                     dbConnection();
                     cmd.Connection = _connect;
-                    cmd.CommandText = "Delete  from `product_type` where type_name ='" + comboBox4.Text + "' ;";
-                    MySqlDataReader reader = cmd.ExecuteReader();
+                    cmd.Parameters.Clear();
+                    cmd.CommandText = "Delete  from product_type where type_name =@typeName ;";
+                    cmd.Parameters.AddWithValue("@typeName", comboBox4.Text);
+                    cmd.ExecuteNonQuery();
                     _connect.Close();
 
 
@@ -827,9 +860,10 @@ namespace Corner_Application
             {
                 dbConnection();
                 cmd.Connection = _connect;
-                cmd.CommandText = "Select `Product_name` from `product`  ; ";
+                cmd.Parameters.Clear();
+                cmd.CommandText = "Select Product_name from product  ; ";
 
-                MySqlDataAdapter mySqlDataAdapterProduct = new MySqlDataAdapter {SelectCommand = cmd};
+                SQLiteDataAdapter mySqlDataAdapterProduct = new SQLiteDataAdapter {SelectCommand = cmd};
                 DataTable dTableProduct = new DataTable();
                 mySqlDataAdapterProduct.Fill(dTableProduct);
 
@@ -855,9 +889,10 @@ namespace Corner_Application
             {
                 dbConnection();
                 cmd.Connection = _connect;
-                cmd.CommandText = "Select `type_name` from `product_type`  ; ";
+                cmd.Parameters.Clear();
+                cmd.CommandText = "Select type_name from product_type  ; ";
 
-                MySqlDataAdapter mySqlDataAdapterProduct = new MySqlDataAdapter {SelectCommand = cmd};
+                SQLiteDataAdapter mySqlDataAdapterProduct = new SQLiteDataAdapter {SelectCommand = cmd};
                 DataTable dTableProduct = new DataTable();
                 mySqlDataAdapterProduct.Fill(dTableProduct);
 
@@ -898,9 +933,11 @@ namespace Corner_Application
                 {
                     dbConnection();
                     cmd.Connection = _connect;
-                    cmd.CommandText = "Select * from `product` where  Product_name = '"+ Product_name + "' ; ";
+                    cmd.Parameters.Clear();
+                    cmd.CommandText = "Select * from product where  Product_name = @Product_name ; ";
+                    cmd.Parameters.AddWithValue("@Product_name", Product_name);
 
-                    MySqlDataAdapter mySqlDataAdapterProduct = new MySqlDataAdapter {SelectCommand = cmd};
+                    SQLiteDataAdapter mySqlDataAdapterProduct = new SQLiteDataAdapter {SelectCommand = cmd};
                     DataTable dTableProduct = new DataTable();
                     mySqlDataAdapterProduct.Fill(dTableProduct);
 
@@ -914,10 +951,11 @@ namespace Corner_Application
                             int PTID = Convert.ToInt16(rowdel["ProductType_id"]);
                             dbConnection();
                             cmd.Connection = _connect;
-                            cmd.CommandText = "Select * from `product_type`  where type_id=" +
-                                             PTID + "; ";
+                            cmd.Parameters.Clear();
+                            cmd.CommandText = "Select * from product_type  where type_id=@PTID; ";
+                            cmd.Parameters.AddWithValue("@PTID", PTID);
 
-                            MySqlDataAdapter mySqlDataAdapterType = new MySqlDataAdapter {SelectCommand = cmd};
+                            SQLiteDataAdapter mySqlDataAdapterType = new SQLiteDataAdapter {SelectCommand = cmd};
                             DataTable dTableType = new DataTable();
                             mySqlDataAdapterType.Fill(dTableType);
 
@@ -995,12 +1033,14 @@ namespace Corner_Application
                     {
                         dbConnection();
                         cmd.Connection = _connect;
-                        cmd.CommandText = "Select * from `product`  where 	Product_name='" + textBox4.Text + "'; ";
+                        cmd.Parameters.Clear();
+                        cmd.CommandText = "Select * from product  where Product_name=@Product_name; ";
+                        cmd.Parameters.AddWithValue("@Product_name", textBox4.Text);
 
-                        //MySqlDataAdapter mySqlDataAdapterProduct = new MySqlDataAdapter {SelectCommand = cmd};
+                        //SQLiteDataAdapter mySqlDataAdapterProduct = new SQLiteDataAdapter {SelectCommand = cmd};
                         //DataTable dTableProduct = new DataTable();
                         //mySqlDataAdapterProduct.Fill(dTableProduct);
-                        MySqlDataReader reader = cmd.ExecuteReader();
+                        SQLiteDataReader reader = cmd.ExecuteReader();
                         bool b = reader.Read();
                         _connect.Close();
 
@@ -1016,10 +1056,11 @@ namespace Corner_Application
 
                             dbConnection();
                             cmd.Connection = _connect;
-                            cmd.CommandText = "Select `type_id` from `product_type`  where 	type_name='" +
-                                              comboBox7.Text + "'; ";
+                            cmd.Parameters.Clear();
+                            cmd.CommandText = "Select type_id from product_type  where type_name=@type_name; ";
+                            cmd.Parameters.AddWithValue("@type_name", comboBox7.Text);
 
-                            MySqlDataAdapter mySqlDataAdapterType = new MySqlDataAdapter {SelectCommand = cmd};
+                            SQLiteDataAdapter mySqlDataAdapterType = new SQLiteDataAdapter {SelectCommand = cmd};
                             DataTable dTableType = new DataTable();
                             mySqlDataAdapterType.Fill(dTableType);
 
@@ -1030,11 +1071,14 @@ namespace Corner_Application
                             {
                                 dbConnection();
                                 cmd.Connection = _connect;
+                                cmd.Parameters.Clear();
                                 cmd.CommandText =
-                                    "INSERT INTO `corner`.`product` (`Product_name`,`Price`,`ProductType_id`,`Store`) VALUES ('" +
-                                    textBox4.Text + "' , '" + pricePro + "' , '" + Convert.ToInt16(rowdel["type_id"]) +
-                                    "' , '" + AddStore + "') ; ";
-                                MySqlDataReader reader2 = cmd.ExecuteReader();
+                                    "INSERT INTO product (Product_name,Price,ProductType_id,Store) VALUES (@Product_name , @Price , @ProductType_id , @Store) ; ";
+                                cmd.Parameters.AddWithValue("@Product_name", textBox4.Text);
+                                cmd.Parameters.AddWithValue("@Price", pricePro);
+                                cmd.Parameters.AddWithValue("@ProductType_id", Convert.ToInt16(rowdel["type_id"]));
+                                cmd.Parameters.AddWithValue("@Store", AddStore);
+                                cmd.ExecuteNonQuery();
                                 _connect.Close();
 
 
@@ -1066,14 +1110,16 @@ namespace Corner_Application
                     {
                         dbConnection();
                         cmd.Connection = _connect;
-                        cmd.CommandText = "Select *  from `product`  where 	Product_name='" + comboBox6.Text + "'; ";
+                        cmd.Parameters.Clear();
+                        cmd.CommandText = "Select *  from product  where Product_name=@Product_name; ";
+                        cmd.Parameters.AddWithValue("@Product_name", comboBox6.Text);
 
-                        //MySqlDataAdapter mySqlDataAdapterProduct = new MySqlDataAdapter {SelectCommand = cmd};
+                        //SQLiteDataAdapter mySqlDataAdapterProduct = new SQLiteDataAdapter {SelectCommand = cmd};
                         //DataTable dTableProduct = new DataTable();
                         //mySqlDataAdapterProduct.Fill(dTableProduct);
 
                         //_connect.Close();
-                        MySqlDataReader reader = cmd.ExecuteReader();
+                        SQLiteDataReader reader = cmd.ExecuteReader();
                         int Product_id = 0;
                         if (reader.Read()){
                             
@@ -1089,10 +1135,11 @@ namespace Corner_Application
 
                         dbConnection();
                         cmd.Connection = _connect;
-                        cmd.CommandText = "Select `type_id` from `product_type` where 	type_name='" +
-                                          comboBox7.Text + "'; ";
+                        cmd.Parameters.Clear();
+                        cmd.CommandText = "Select type_id from product_type where type_name=@type_name; ";
+                        cmd.Parameters.AddWithValue("@type_name", comboBox7.Text);
 
-                        MySqlDataAdapter mySqlDataAdapterlogin = new MySqlDataAdapter {SelectCommand = cmd};
+                        SQLiteDataAdapter mySqlDataAdapterlogin = new SQLiteDataAdapter {SelectCommand = cmd};
                         DataTable dTableLogin = new DataTable();
                         mySqlDataAdapterlogin.Fill(dTableLogin);
 
@@ -1103,14 +1150,16 @@ namespace Corner_Application
                               //  `Product_id`,`Product_name`,`Price`,`Store` ,`ProductType_id`
                             dbConnection();
                             cmd.Connection = _connect;
+                            cmd.Parameters.Clear();
                             cmd.CommandText =
-                                "UPDATE `corner`.`product` SET `Product_name` = '" + textBox4.Text +
-                                "' , `Price`= '" + pricePro + "' , `Store`= '" + AddStore +
-                                "' , `ProductType_id`= '" + Convert.ToInt16(rowType["type_id"]) +
-                                "' where Product_id ='" + Product_id + "'; ";
+                                "UPDATE product SET Product_name = @Product_name , Price= @Price , Store= @Store , ProductType_id= @ProductType_id where Product_id =@Product_id; ";
+                            cmd.Parameters.AddWithValue("@Product_name", textBox4.Text);
+                            cmd.Parameters.AddWithValue("@Price", pricePro);
+                            cmd.Parameters.AddWithValue("@Store", AddStore);
+                            cmd.Parameters.AddWithValue("@ProductType_id", Convert.ToInt16(rowType["type_id"]));
+                            cmd.Parameters.AddWithValue("@Product_id", Product_id);
 
-                            MySqlDataReader reader4 = cmd.ExecuteReader();
-                            reader4.Read();
+                            cmd.ExecuteNonQuery();
                             _connect.Close();
 
 
@@ -1133,8 +1182,10 @@ namespace Corner_Application
                 {
                     dbConnection();
                     cmd.Connection = _connect;
-                    cmd.CommandText = "Delete  from `product` where Product_name='" + comboBox6.Text + "'; ";
-                    MySqlDataReader reader = cmd.ExecuteReader();
+                    cmd.Parameters.Clear();
+                    cmd.CommandText = "Delete  from product where Product_name=@Product_name; ";
+                    cmd.Parameters.AddWithValue("@Product_name", comboBox6.Text);
+                    cmd.ExecuteNonQuery();
                     _connect.Close();
 
 
@@ -1155,12 +1206,13 @@ namespace Corner_Application
             {
                 dbConnection();
                 cmd.Connection = _connect;
-                cmd.CommandText = "Select * from `month_details` ; ";
+                cmd.Parameters.Clear();
+                cmd.CommandText = "Select * from month_details ; ";
 
-                //MySqlDataAdapter mySqlDataAdapterlogin = new MySqlDataAdapter {SelectCommand = cmd};
+                //SQLiteDataAdapter mySqlDataAdapterlogin = new SQLiteDataAdapter {SelectCommand = cmd};
                 //DataTable dTableLogin = new DataTable();
                 //mySqlDataAdapterlogin.Fill(dTableLogin);
-                MySqlDataReader readerMEx = cmd.ExecuteReader();
+                SQLiteDataReader readerMEx = cmd.ExecuteReader();
                 bool b = readerMEx.Read();
                 _connect.Close();
 
@@ -1169,9 +1221,10 @@ namespace Corner_Application
                 {
                     dbConnection();
                     cmd.Connection = _connect;
-                    cmd.CommandText = "Select * from `month_details` ; ";
+                    cmd.Parameters.Clear();
+                    cmd.CommandText = "Select * from month_details ; ";
 
-                    MySqlDataAdapter mySqlDataAdapterlogin = new MySqlDataAdapter { SelectCommand = cmd };
+                    SQLiteDataAdapter mySqlDataAdapterlogin = new SQLiteDataAdapter { SelectCommand = cmd };
                     DataTable dTableLogin = new DataTable();
                     mySqlDataAdapterlogin.Fill(dTableLogin);
                     _connect.Close();
@@ -1189,18 +1242,24 @@ namespace Corner_Application
 
                 dbConnection();
                 cmd.Connection = _connect;
+                cmd.Parameters.Clear();
                 cmd.CommandText =
-                    "INSERT INTO `corner`.`month_details` (`MonthNumber`,`TotalSell`,`TotalBuy`, `TotalMonthlyExpenses`,`ProfitDay`) VALUES ('" +
-                    MNumber + "' , '" + TSell + "' , '" + TBuy + "' , '" + MonthlyExp + "' , '" + profitMonth + "') ; ";
-                MySqlDataReader reader2 = cmd.ExecuteReader();
+                    "INSERT INTO month_details (MonthNumber,TotalSell,TotalBuy, TotalMonthlyExpenses,ProfitDay) VALUES (@MonthNumber , @TotalSell , @TotalBuy , @TotalMonthlyExpenses , @ProfitDay) ; ";
+                cmd.Parameters.AddWithValue("@MonthNumber", MNumber);
+                cmd.Parameters.AddWithValue("@TotalSell", TSell);
+                cmd.Parameters.AddWithValue("@TotalBuy", TBuy);
+                cmd.Parameters.AddWithValue("@TotalMonthlyExpenses", MonthlyExp);
+                cmd.Parameters.AddWithValue("@ProfitDay", profitMonth);
+                cmd.ExecuteNonQuery();
                 _connect.Close();
 
 
                 //remove from Monthly Expenses 
                 dbConnection();
                 cmd.Connection = _connect;
-                cmd.CommandText = "Delete  from `day_details` ; Delete  from `monthly_expenses` ;";
-                MySqlDataReader reader = cmd.ExecuteReader();
+                cmd.Parameters.Clear();
+                cmd.CommandText = "Delete  from day_details ; Delete  from monthly_expenses ;";
+                cmd.ExecuteNonQuery();
                 _connect.Close();
 
                 button5.Enabled = false;
@@ -1232,12 +1291,14 @@ namespace Corner_Application
 
                     dbConnection();
                     cmd.Connection = _connect;
+                    cmd.Parameters.Clear();
                     cmd.CommandText =
-                        "INSERT INTO `corner`.`monthly_expenses` (`expens_name`,`Price`) VALUES ('" +
-                        ExpName + "' , '" + Exp_Price + "' ) ;" +
-                        "INSERT INTO `corner`.`all_monthlyexpenses` (`expens_name`,`Price`,`Date_time`) VALUES('" +
-                        ExpName + "' , '" + Exp_Price + "' , '" + DateTime.Now.ToString("s") + "' ); ";
-                    MySqlDataReader reader2 = cmd.ExecuteReader();
+                        "INSERT INTO monthly_expenses (expens_name,Price) VALUES (@expens_name , @Price ) ;" +
+                        "INSERT INTO all_monthlyexpenses (expens_name,Price,Date_time) VALUES(@expens_name , @Price , @Date_time ); ";
+                    cmd.Parameters.AddWithValue("@expens_name", ExpName);
+                    cmd.Parameters.AddWithValue("@Price", Exp_Price);
+                    cmd.Parameters.AddWithValue("@Date_time", DateTime.Now.ToString("s"));
+                    cmd.ExecuteNonQuery();
                     _connect.Close();
 
 
@@ -1272,8 +1333,9 @@ namespace Corner_Application
                     SearchName.Visible = true;
                     dbConnection();
                     cmd.Connection = _connect;
-                    cmd.CommandText = "Select * from `product_type` ;";
-                    MySqlDataAdapter mySqlDataAdaptersell = new MySqlDataAdapter {SelectCommand = cmd};
+                    cmd.Parameters.Clear();
+                    cmd.CommandText = "Select * from product_type ;";
+                    SQLiteDataAdapter mySqlDataAdaptersell = new SQLiteDataAdapter {SelectCommand = cmd};
                     DataTable dTableProType = new DataTable();
                     mySqlDataAdaptersell.Fill(dTableProType);
                     _connect.Close();
@@ -1291,8 +1353,9 @@ namespace Corner_Application
                     SearchName.Visible = true;
                     dbConnection();
                     cmd.Connection = _connect;
-                    cmd.CommandText = "Select * from `product` ;";
-                    MySqlDataAdapter mySqlDataAdaptersell = new MySqlDataAdapter {SelectCommand = cmd};
+                    cmd.Parameters.Clear();
+                    cmd.CommandText = "Select * from product ;";
+                    SQLiteDataAdapter mySqlDataAdaptersell = new SQLiteDataAdapter {SelectCommand = cmd};
                     DataTable dTablePro = new DataTable();
                     mySqlDataAdaptersell.Fill(dTablePro);
                     _connect.Close();
@@ -1367,7 +1430,7 @@ namespace Corner_Application
                 //    //    " INNER JOIN product ON product.ProductType_id=product_type.type_id  INNER JOIN product_process ON product_process.Product_name=product.Product_name where product_type.type_name= '" +
                 //    //    SearchName.Text + "' and " + a.ToString("s") + "<= product_process.DateTime and product_process.DateTime <=" +
                 //    //    b + " ; ";
-                //    MySqlDataAdapter mysqlcat = new MySqlDataAdapter {SelectCommand = cmd};
+                //    SQLiteDataAdapter mysqlcat = new SQLiteDataAdapter {SelectCommand = cmd};
                 //    DataTable dtcat = new DataTable();
                 //    mysqlcat.Fill(dtcat);
                 //    string catid = null;
@@ -1375,12 +1438,15 @@ namespace Corner_Application
                 //    {
                 //        catid = Convert.ToString(row["type_id"]);
                 //}
-                    //MySqlCommand cmd2 = new MySqlCommand();
+                    //SQLiteCommand cmd2 = new SQLiteCommand();
                     int catid = SearchName.SelectedIndex + 1;
-                    cmd.Connection = _connect; 
-                    cmd.CommandText = "SELECT * FROM `product_process` where catid='"+catid.ToString()+ "' and DateTime Between '" + a.ToString("s") +
-                                      "' and '" + b.ToString("s") + " ' ;";
-                    MySqlDataAdapter mySqlDataAdapterUserShify = new MySqlDataAdapter { SelectCommand = cmd };
+                    cmd.Connection = _connect;
+                    cmd.Parameters.Clear();
+                    cmd.CommandText = "SELECT * FROM product_process where catid=@catid and \"DateTime\" Between @startDate and @endDate ;";
+                    cmd.Parameters.AddWithValue("@catid", catid);
+                    cmd.Parameters.AddWithValue("@startDate", a.ToString("s"));
+                    cmd.Parameters.AddWithValue("@endDate", b.ToString("s"));
+                    SQLiteDataAdapter mySqlDataAdapterUserShify = new SQLiteDataAdapter { SelectCommand = cmd };
 
                     DataTable dTableUserShift = new DataTable();
                     mySqlDataAdapterUserShify.Fill(dTableUserShift);
@@ -1458,9 +1524,11 @@ namespace Corner_Application
                     {
                         dbConnection();
                         cmd.Connection = _connect;
-                        cmd.CommandText = "Select * from `product_process` WHERE DateTime Between '" + a.ToString("s") +
-                                          "' and '" + b.ToString("s") + "' ;";
-                        MySqlDataAdapter mySqlDataAdapterBuy = new MySqlDataAdapter {SelectCommand = cmd};
+                        cmd.Parameters.Clear();
+                        cmd.CommandText = "Select * from product_process WHERE \"DateTime\" Between @startDate and @endDate ;";
+                        cmd.Parameters.AddWithValue("@startDate", a.ToString("s"));
+                        cmd.Parameters.AddWithValue("@endDate", b.ToString("s"));
+                        SQLiteDataAdapter mySqlDataAdapterBuy = new SQLiteDataAdapter {SelectCommand = cmd};
                         DataTable dTableBuy = new DataTable();
                         mySqlDataAdapterBuy.Fill(dTableBuy);
                         _connect.Close();
@@ -1537,10 +1605,12 @@ namespace Corner_Application
                     {
                         dbConnection();
                         cmd.Connection = _connect;
-                        cmd.CommandText = "Select * from `product_process` WHERE product_name = '" + SearchName.Text +
-                                          "' and DateTime Between '" + a.ToString("s") +
-                                          "' and '" + b.ToString("s") + "' ;";
-                        MySqlDataAdapter mySqlDataAdapterBuy = new MySqlDataAdapter {SelectCommand = cmd};
+                        cmd.Parameters.Clear();
+                        cmd.CommandText = "Select * from product_process WHERE product_name = @product_name and \"DateTime\" Between @startDate and @endDate ;";
+                        cmd.Parameters.AddWithValue("@product_name", SearchName.Text);
+                        cmd.Parameters.AddWithValue("@startDate", a.ToString("s"));
+                        cmd.Parameters.AddWithValue("@endDate", b.ToString("s"));
+                        SQLiteDataAdapter mySqlDataAdapterBuy = new SQLiteDataAdapter {SelectCommand = cmd};
                         DataTable dTableBuy = new DataTable();
                         mySqlDataAdapterBuy.Fill(dTableBuy);
                         _connect.Close();
@@ -1639,9 +1709,11 @@ namespace Corner_Application
 
                     dbConnection();
                     cmd.Connection = _connect;
-                    cmd.CommandText = "Select * from `product_process` WHERE  DateTime Between '" + a.ToString("s") +
-                                      "' and '" + b.ToString("s") + "' ;";
-                    MySqlDataAdapter mySqlDataAdapterBuy = new MySqlDataAdapter {SelectCommand = cmd};
+                    cmd.Parameters.Clear();
+                    cmd.CommandText = "Select * from product_process WHERE  \"DateTime\" Between @startDate and @endDate ;";
+                    cmd.Parameters.AddWithValue("@startDate", a.ToString("s"));
+                    cmd.Parameters.AddWithValue("@endDate", b.ToString("s"));
+                    SQLiteDataAdapter mySqlDataAdapterBuy = new SQLiteDataAdapter {SelectCommand = cmd};
                     DataTable dTableBuy = new DataTable();
                     mySqlDataAdapterBuy.Fill(dTableBuy);
                     _connect.Close();
@@ -1730,10 +1802,11 @@ namespace Corner_Application
                         // start add to groupsearchresult إضافة مبلغ
                         dbConnection();
                         cmd.Connection = _connect;
-                        cmd.CommandText = "Select * from `safe` WHERE  `DTime` Between '" + a.ToString("s") +
-                                          "' and '" + b.ToString("s") +
-                                          "' and type= 'إضافة مبلغ' ;";
-                        MySqlDataAdapter mySqlDataAdapterSafe = new MySqlDataAdapter {SelectCommand = cmd};
+                        cmd.Parameters.Clear();
+                        cmd.CommandText = "Select * from safe WHERE  DTime Between @startDate and @endDate and type= 'إضافة مبلغ' ;";
+                        cmd.Parameters.AddWithValue("@startDate", a.ToString("s"));
+                        cmd.Parameters.AddWithValue("@endDate", b.ToString("s"));
+                        SQLiteDataAdapter mySqlDataAdapterSafe = new SQLiteDataAdapter {SelectCommand = cmd};
                         DataTable dTableSafe = new DataTable();
                         mySqlDataAdapterBuy.Fill(dTableSafe);
                         _connect.Close();
@@ -1764,11 +1837,13 @@ namespace Corner_Application
 
 
                         dbConnection();
+                        cmd.Parameters.Clear();
                         cmd.CommandText =
-                            "Select  `Type` ,`price` , `reason`,`proName`, `quantity`, `ReasonOfT`, `PersonTake` , `Dtime` from `safe` where  Dtime Between '" + a.ToString("s") +
-                            "' and '" + b.ToString("s") + "' AND not Type = 'إضافة مبلغ' ; ";
+                            "Select  Type ,price , reason,proName, quantity, ReasonOfT, PersonTake , Dtime from safe where  Dtime Between @startDate and @endDate AND not Type = 'إضافة مبلغ' ; ";
+                        cmd.Parameters.AddWithValue("@startDate", a.ToString("s"));
+                        cmd.Parameters.AddWithValue("@endDate", b.ToString("s"));
 
-                        MySqlDataAdapter mySqlDataAdapterViewProduct = new MySqlDataAdapter {SelectCommand = cmd};
+                        SQLiteDataAdapter mySqlDataAdapterViewProduct = new SQLiteDataAdapter {SelectCommand = cmd};
                         DataTable dTableViewProduct = new DataTable();
                         mySqlDataAdapterViewProduct.Fill(dTableViewProduct);
                         _connect.Close();
@@ -1810,11 +1885,13 @@ namespace Corner_Application
                     Total.Visible = false;
 
                     dbConnection();
+                    cmd.Parameters.Clear();
                     cmd.CommandText =
-                        "Select  `expens_name` ,`Price` , `Date_time` from `all_monthlyexpenses` where Date_time Between '" + a.ToString("s") +
-                        "' and '" + b.ToString("s") + "' ; ";
+                        "Select  expens_name ,Price , Date_time from all_monthlyexpenses where Date_time Between @startDate and @endDate ; ";
+                    cmd.Parameters.AddWithValue("@startDate", a.ToString("s"));
+                    cmd.Parameters.AddWithValue("@endDate", b.ToString("s"));
 
-                    MySqlDataAdapter mySqlDataAdapterViewProduct = new MySqlDataAdapter {SelectCommand = cmd};
+                    SQLiteDataAdapter mySqlDataAdapterViewProduct = new SQLiteDataAdapter {SelectCommand = cmd};
                     DataTable dTableViewProduct = new DataTable();
                     mySqlDataAdapterViewProduct.Fill(dTableViewProduct);
                     _connect.Close();
@@ -1853,10 +1930,12 @@ namespace Corner_Application
             {
                 dbConnection();
                 cmd.Connection = _connect;
+                cmd.Parameters.Clear();
                 cmd.CommandText =
-                    "INSERT INTO `corner`.`product` (`Product_name`,`ProductType_id`,`store`,`price`) VALUES ('" +
-                    a[i] +  "','"+a2[i]+ "','0','0') ; ";
-                MySqlDataReader reader2 = cmd.ExecuteReader();
+                    "INSERT INTO product (Product_name,ProductType_id,store,price) VALUES (@Product_name,@ProductType_id,'0','0') ; ";
+                cmd.Parameters.AddWithValue("@Product_name", a[i]);
+                cmd.Parameters.AddWithValue("@ProductType_id", a2[i]);
+                cmd.ExecuteNonQuery();
                 _connect.Close();
             }
         }
@@ -1869,14 +1948,16 @@ namespace Corner_Application
                 //  `Product_id`,`Product_name`,`Price`,`Store` ,`ProductType_id`
                 dbConnection();
                 cmd.Connection = _connect;
+                cmd.Parameters.Clear();
                 cmd.CommandText =
-                    "UPDATE `corner`.`product` SET `Product_name` = '" + Convert.ToString(dataGridView3.Rows[i].Cells[1].Value) +
-                    "' , `Price`= '" + Convert.ToDouble(dataGridView3.Rows[i].Cells[2].Value) + "' , `Store`= '" + Convert.ToInt16(dataGridView3.Rows[i].Cells[3].Value) +
-                    "' , `ProductType_id`= '" + Convert.ToInt16(dataGridView3.Rows[i].Cells[4].Value) +
-                    "' where Product_id ='" + Convert.ToInt16(dataGridView3.Rows[i].Cells[0].Value) + "'; ";
+                    "UPDATE product SET Product_name = @Product_name , Price= @Price , Store= @Store , ProductType_id= @ProductType_id where Product_id =@Product_id; ";
+                cmd.Parameters.AddWithValue("@Product_name", Convert.ToString(dataGridView3.Rows[i].Cells[1].Value));
+                cmd.Parameters.AddWithValue("@Price", Convert.ToDouble(dataGridView3.Rows[i].Cells[2].Value));
+                cmd.Parameters.AddWithValue("@Store", Convert.ToInt16(dataGridView3.Rows[i].Cells[3].Value));
+                cmd.Parameters.AddWithValue("@ProductType_id", Convert.ToInt16(dataGridView3.Rows[i].Cells[4].Value));
+                cmd.Parameters.AddWithValue("@Product_id", Convert.ToInt16(dataGridView3.Rows[i].Cells[0].Value));
 
-                MySqlDataReader reader4 = cmd.ExecuteReader();
-                reader4.Read();
+                cmd.ExecuteNonQuery();
                 _connect.Close();
 
 
@@ -1889,14 +1970,14 @@ namespace Corner_Application
             //cmd.Connection = _connect;
             //cmd.CommandText =
             //    "ALTER TABLE product_process  ADD CatID int; ";
-            //MySqlDataReader reader = cmd.ExecuteReader();
+            //SQLiteDataReader reader = cmd.ExecuteReader();
             //reader.Read();
             //_connect.Close();
             dbConnection();
-            MySqlCommand cmd2 = new MySqlCommand();
+            SQLiteCommand cmd2 = new SQLiteCommand();
             cmd2.Connection = _connect;
-            cmd2.CommandText = "SELECT * FROM `product`  ;";
-            MySqlDataAdapter mySqlDataAdapterBuy = new MySqlDataAdapter {SelectCommand = cmd2};
+            cmd2.CommandText = "SELECT * FROM product  ;";
+            SQLiteDataAdapter mySqlDataAdapterBuy = new SQLiteDataAdapter {SelectCommand = cmd2};
             DataTable dTableBuy = new DataTable();
             mySqlDataAdapterBuy.Fill(dTableBuy);
             _connect.Close();
@@ -1906,7 +1987,7 @@ namespace Corner_Application
                 //cmd.Connection = _connect;
                 //cmd.CommandText =
                 //    "SELECT * FROM `product_process`  WHERE Product_name = '" +Convert.ToString( x["Product_name"]) + "'; ";
-                //MySqlDataReader reader = cmd.ExecuteReader();
+                //SQLiteDataReader reader = cmd.ExecuteReader();
                 //_connect.Close();
                 //if (reader.Read())
                 //{
@@ -1915,13 +1996,14 @@ namespace Corner_Application
 
 
                 dbConnection();
-                MySqlCommand cmd3 = new MySqlCommand();
+                SQLiteCommand cmd3 = new SQLiteCommand();
                 cmd3.Connection = _connect;
+                cmd3.Parameters.Clear();
                 cmd3.CommandText =
-                    "UPDATE product_process SET CatID = '" + Convert.ToString(x["ProductType_id"]) +
-                    "' WHERE Product_name = '" + Convert.ToString(x["Product_name"]) + "'; ";
-                MySqlDataReader reader3 = cmd3.ExecuteReader();
-                reader3.Read();
+                    "UPDATE product_process SET CatID = @CatID WHERE Product_name = @Product_name; ";
+                cmd3.Parameters.AddWithValue("@CatID", Convert.ToString(x["ProductType_id"]));
+                cmd3.Parameters.AddWithValue("@Product_name", Convert.ToString(x["Product_name"]));
+                cmd3.ExecuteNonQuery();
                 _connect.Close();
             //}
 

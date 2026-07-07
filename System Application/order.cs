@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
+using System.Data.SQLite;
 
 namespace Corner_Application
 {
@@ -15,14 +15,14 @@ namespace Corner_Application
     {
         //public object product_id;
 
-        private MySqlConnection _connect;
-        MySqlCommand cmd = new MySqlCommand();
+        private SQLiteConnection _connect;
+        SQLiteCommand cmd = new SQLiteCommand();
 
         void dbConnection()
         {
             try
             {
-                _connect = new MySqlConnection(Program.Constring);
+                _connect = new SQLiteConnection(Program.Constring);
                 _connect.Open();
             }
             catch (Exception e)
@@ -54,9 +54,11 @@ namespace Corner_Application
             {
                 dbConnection();
                 cmd.Connection = _connect;
+                cmd.Parameters.Clear();
                 int idU = Convert.ToInt32(label4.Text);
-                cmd.CommandText = "Select * from `product` where 	Product_id='" + idU + " '; ";
-                MySqlDataAdapter mySqlDataAdapterProduct = new MySqlDataAdapter { SelectCommand = cmd };
+                cmd.CommandText = "Select * from product where Product_id = @productId;";
+                cmd.Parameters.AddWithValue("@productId", idU);
+                SQLiteDataAdapter mySqlDataAdapterProduct = new SQLiteDataAdapter { SelectCommand = cmd };
                 DataTable dTableProduct = new DataTable();
                 mySqlDataAdapterProduct.Fill(dTableProduct);
                 _connect.Close();
@@ -155,9 +157,15 @@ namespace Corner_Application
                     
                     dbConnection();
                     cmd.Connection = _connect;
-                    cmd.CommandText = "INSERT INTO `corner`.`bill` (`pro_name`, `pro_price`, `quantity`,`tot_price`,`store`,`IDproduct`)  VALUES ( ' "+
-                        label5.Text + " ', ' "+ price +" ' , ' " + thisValue + " ' , ' " + total + "','" + Convert.ToInt32(storeLab.Text) + " ','" + idpro + " ');";
-                    MySqlDataReader reader3 = cmd.ExecuteReader();
+                    cmd.Parameters.Clear();
+                    cmd.CommandText = "INSERT INTO bill (pro_name, pro_price, quantity, tot_price, store, IDproduct) VALUES (@proName, @proPrice, @quantity, @totPrice, @store, @idProduct);";
+                    cmd.Parameters.AddWithValue("@proName", label5.Text);
+                    cmd.Parameters.AddWithValue("@proPrice", price);
+                    cmd.Parameters.AddWithValue("@quantity", thisValue);
+                    cmd.Parameters.AddWithValue("@totPrice", total);
+                    cmd.Parameters.AddWithValue("@store", Convert.ToInt32(storeLab.Text));
+                    cmd.Parameters.AddWithValue("@idProduct", idpro);
+                    cmd.ExecuteNonQuery();
                     _connect.Close();
                       
                 }//end try

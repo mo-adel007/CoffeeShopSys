@@ -41,6 +41,7 @@ namespace Corner_Application
         public order()
         {
             InitializeComponent();
+            Theme.Apply(this);
  
         }
 

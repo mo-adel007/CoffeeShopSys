@@ -42,6 +42,7 @@ namespace Corner_Application
         public worker()
         {
             InitializeComponent();
+            Theme.Apply(this);
 
             createButtons();
             CDay();

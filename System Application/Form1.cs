@@ -40,6 +40,7 @@ namespace Corner_Application
         public LoginForm()
         {
             InitializeComponent();
+            Theme.Apply(this);
         }
 
         private void txtUserName_keypress(object sender, KeyPressEventArgs e)

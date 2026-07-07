@@ -15,6 +15,7 @@ namespace Corner_Application
         public Admin()
         {
             InitializeComponent();
+            Theme.Apply(this);
         }
 
         private void AsUser_Click(object sender, EventArgs e)

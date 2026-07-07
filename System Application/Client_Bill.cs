@@ -35,6 +35,7 @@ namespace Corner_Application
         public Client_Bill()
         {
             InitializeComponent();
+            Theme.Apply(this);
 
 
             try

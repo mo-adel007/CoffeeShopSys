@@ -33,6 +33,7 @@ namespace Corner_Application
         public Control_Panel()
         {
             InitializeComponent();
+            Theme.Apply(this);
             usersData();
             DataCBoxUsers();
             dateTimePicker1.CustomFormat = "MM/dd/yyyy hh:mm tt";

@@ -1,0 +1,843 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="cornerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="All_MonthlyExpenses">
+          <Key>
+            <PropertyRef Name="idMExp" />
+          </Key>
+          <Property Name="idMExp" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Exp_Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="price" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="date_time" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Bill">
+          <Key>
+            <PropertyRef Name="id_bill" />
+          </Key>
+          <Property Name="id_bill" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="pro_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="pro_price" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="quality" Type="int" Nullable="false" />
+          <Property Name="tot_price" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="store" Type="int" Nullable="false" />
+          <Property Name="IDproduct" Type="int" />
+        </EntityType>
+        <EntityType Name="CloseDAy">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="processT" Type="nvarchar" MaxLength="50" />
+          <Property Name="price" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="reason" Type="nvarchar" MaxLength="50" />
+          <Property Name="proName" Type="nvarchar" MaxLength="50" />
+          <Property Name="quantity" Type="int" />
+          <Property Name="ReasonOfT" Type="nvarchar" MaxLength="50" />
+          <Property Name="personT" Type="nvarchar" MaxLength="50" />
+          <Property Name="userN" Type="nvarchar" MaxLength="50" />
+          <Property Name="DTime" Type="datetime" Nullable="false" />
+          <Property Name="userId" Type="int" Nullable="false" />
+          <Property Name="shiftNumber" Type="int" Nullable="false" />
+          <Property Name="whoPerson_add" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="CloseShift">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="processT" Type="nvarchar" MaxLength="50" />
+          <Property Name="price" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="reason" Type="nvarchar" MaxLength="50" />
+          <Property Name="proName" Type="nvarchar" MaxLength="50" />
+          <Property Name="quantity" Type="int" />
+          <Property Name="ReasonOfTake" Type="nvarchar" MaxLength="50" />
+          <Property Name="personTake" Type="nvarchar" MaxLength="50" />
+          <Property Name="userName" Type="nvarchar" MaxLength="50" />
+          <Property Name="dateT" Type="datetime" Nullable="false" />
+          <Property Name="userID" Type="int" Nullable="false" />
+          <Property Name="shiftNu" Type="int" Nullable="false" />
+          <Property Name="whoPersonAdd" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Day_Details">
+          <Key>
+            <PropertyRef Name="id_day" />
+          </Key>
+          <Property Name="id_day" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DAyNum" Type="int" />
+          <Property Name="TotalSell" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TotalBuy" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="profitDAy" Type="decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="Login">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="pass" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="time_work" Type="nvarchar" MaxLength="25" />
+        </EntityType>
+        <EntityType Name="M_Expenses">
+          <Key>
+            <PropertyRef Name="idExp" />
+          </Key>
+          <Property Name="idExp" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Exp_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="price" Type="decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="Month_Details">
+          <Key>
+            <PropertyRef Name="id_Month" />
+          </Key>
+          <Property Name="id_Month" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MonthNumber" Type="int" />
+          <Property Name="TotalSell" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TotalBuy" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="profitMonth" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TotalMonthlyExpenses" Type="decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="product">
+          <Key>
+            <PropertyRef Name="product_id" />
+          </Key>
+          <Property Name="product_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="product_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="price" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="productType_id" Type="int" />
+          <Property Name="store" Type="int" Nullable="false" />
+          <Property Name="MakeAButton" Type="nvarchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="product_process">
+          <Key>
+            <PropertyRef Name="id_proccess" />
+          </Key>
+          <Property Name="id_proccess" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="process_type" Type="nvarchar" MaxLength="50" />
+          <Property Name="product_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="quantities" Type="int" />
+          <Property Name="price" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="date_time" Type="datetime" Nullable="false" />
+          <Property Name="IDproduct" Type="int" />
+          <Property Name="userID" Type="int" />
+        </EntityType>
+        <EntityType Name="product_type">
+          <Key>
+            <PropertyRef Name="type_id" />
+          </Key>
+          <Property Name="type_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="type_Name" Type="nvarchar" MaxLength="25" Nullable="false" />
+        </EntityType>
+        <EntityType Name="safe">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="type" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="price" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="reason" Type="nvarchar" MaxLength="50" />
+          <Property Name="product_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="quantity" Type="int" />
+          <Property Name="ReasonOfTake" Type="nvarchar" MaxLength="50" />
+          <Property Name="personTake" Type="nvarchar" MaxLength="50" />
+          <Property Name="user_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="date_time" Type="datetime" Nullable="false" />
+          <Property Name="userID" Type="int" />
+          <Property Name="who_PersonAdd" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Shift_Details">
+          <Key>
+            <PropertyRef Name="id_shift" />
+          </Key>
+          <Property Name="id_shift" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="shiftNu" Type="int" />
+          <Property Name="ToalBuy" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TotalSell" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="profit" Type="decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Timing">
+          <Key>
+            <PropertyRef Name="user_Name" />
+            <PropertyRef Name="Login_date_time" />
+          </Key>
+          <Property Name="user_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Login_date_time" Type="datetime" Nullable="false" />
+          <Property Name="Logout_date_time" Type="datetime" Nullable="false" />
+          <Property Name="user_id" Type="int" />
+        </EntityType>
+        <EntityType Name="User_shift">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userN" Type="nvarchar" MaxLength="50" />
+          <Property Name="shiftNu" Type="int" />
+        </EntityType>
+        <Association Name="FK_Bill_product">
+          <End Role="product" Type="Self.product" Multiplicity="0..1" />
+          <End Role="Bill" Type="Self.Bill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product">
+              <PropertyRef Name="product_id" />
+            </Principal>
+            <Dependent Role="Bill">
+              <PropertyRef Name="IDproduct" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_product_process_Login">
+          <End Role="Login" Type="Self.Login" Multiplicity="0..1" />
+          <End Role="product_process" Type="Self.product_process" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Login">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="product_process">
+              <PropertyRef Name="userID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_product_process_product1">
+          <End Role="product" Type="Self.product" Multiplicity="0..1" />
+          <End Role="product_process" Type="Self.product_process" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product">
+              <PropertyRef Name="product_id" />
+            </Principal>
+            <Dependent Role="product_process">
+              <PropertyRef Name="IDproduct" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_product_product_type">
+          <End Role="product_type" Type="Self.product_type" Multiplicity="0..1" />
+          <End Role="product" Type="Self.product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product_type">
+              <PropertyRef Name="type_id" />
+            </Principal>
+            <Dependent Role="product">
+              <PropertyRef Name="productType_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_safe_Login">
+          <End Role="Login" Type="Self.Login" Multiplicity="0..1" />
+          <End Role="safe" Type="Self.safe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Login">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="safe">
+              <PropertyRef Name="userID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Timing_Login">
+          <End Role="Login" Type="Self.Login" Multiplicity="0..1" />
+          <End Role="Timing" Type="Self.Timing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Login">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Timing">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="cornerModelStoreContainer">
+          <EntitySet Name="All_MonthlyExpenses" EntityType="Self.All_MonthlyExpenses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Bill" EntityType="Self.Bill" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CloseDAy" EntityType="Self.CloseDAy" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CloseShift" EntityType="Self.CloseShift" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Day_Details" EntityType="Self.Day_Details" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Login" EntityType="Self.Login" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="M_Expenses" EntityType="Self.M_Expenses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Month_Details" EntityType="Self.Month_Details" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="product" EntityType="Self.product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="product_process" EntityType="Self.product_process" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="product_type" EntityType="Self.product_type" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="safe" EntityType="Self.safe" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Shift_Details" EntityType="Self.Shift_Details" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Timing" EntityType="Self.Timing" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User_shift" EntityType="Self.User_shift" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Bill_product" Association="Self.FK_Bill_product">
+            <End Role="product" EntitySet="product" />
+            <End Role="Bill" EntitySet="Bill" />
+          </AssociationSet>
+          <AssociationSet Name="FK_product_process_Login" Association="Self.FK_product_process_Login">
+            <End Role="Login" EntitySet="Login" />
+            <End Role="product_process" EntitySet="product_process" />
+          </AssociationSet>
+          <AssociationSet Name="FK_product_process_product1" Association="Self.FK_product_process_product1">
+            <End Role="product" EntitySet="product" />
+            <End Role="product_process" EntitySet="product_process" />
+          </AssociationSet>
+          <AssociationSet Name="FK_product_product_type" Association="Self.FK_product_product_type">
+            <End Role="product_type" EntitySet="product_type" />
+            <End Role="product" EntitySet="product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_safe_Login" Association="Self.FK_safe_Login">
+            <End Role="Login" EntitySet="Login" />
+            <End Role="safe" EntitySet="safe" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Timing_Login" Association="Self.FK_Timing_Login">
+            <End Role="Login" EntitySet="Login" />
+            <End Role="Timing" EntitySet="Timing" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="cornerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="All_MonthlyExpenses">
+          <Key>
+            <PropertyRef Name="idMExp" />
+          </Key>
+          <Property Name="idMExp" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Exp_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="price" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="date_time" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Bill">
+          <Key>
+            <PropertyRef Name="id_bill" />
+          </Key>
+          <Property Name="id_bill" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="pro_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="pro_price" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="quality" Type="Int32" Nullable="false" />
+          <Property Name="tot_price" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="store" Type="Int32" Nullable="false" />
+          <Property Name="IDproduct" Type="Int32" />
+          <NavigationProperty Name="product" Relationship="Self.FK_Bill_product" FromRole="Bill" ToRole="product" />
+        </EntityType>
+        <EntityType Name="CloseDAy">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="processT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="price" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="reason" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="proName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="quantity" Type="Int32" />
+          <Property Name="ReasonOfT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="personT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="userN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="userId" Type="Int32" Nullable="false" />
+          <Property Name="shiftNumber" Type="Int32" Nullable="false" />
+          <Property Name="whoPerson_add" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="CloseShift">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="processT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="price" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="reason" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="proName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="quantity" Type="Int32" />
+          <Property Name="ReasonOfTake" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="personTake" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="userName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="dateT" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="userID" Type="Int32" Nullable="false" />
+          <Property Name="shiftNu" Type="Int32" Nullable="false" />
+          <Property Name="whoPersonAdd" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Day_Details">
+          <Key>
+            <PropertyRef Name="id_day" />
+          </Key>
+          <Property Name="id_day" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DAyNum" Type="Int32" />
+          <Property Name="TotalSell" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="TotalBuy" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="profitDAy" Type="Decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="Login">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="pass" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="time_work" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="product_process" Relationship="Self.FK_product_process_Login" FromRole="Login" ToRole="product_process" />
+          <NavigationProperty Name="safes" Relationship="Self.FK_safe_Login" FromRole="Login" ToRole="safe" />
+          <NavigationProperty Name="Timings" Relationship="Self.FK_Timing_Login" FromRole="Login" ToRole="Timing" />
+        </EntityType>
+        <EntityType Name="M_Expenses">
+          <Key>
+            <PropertyRef Name="idExp" />
+          </Key>
+          <Property Name="idExp" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Exp_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="price" Type="Decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="Month_Details">
+          <Key>
+            <PropertyRef Name="id_Month" />
+          </Key>
+          <Property Name="id_Month" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MonthNumber" Type="Int32" />
+          <Property Name="TotalSell" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="TotalBuy" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="profitMonth" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="TotalMonthlyExpenses" Type="Decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="product">
+          <Key>
+            <PropertyRef Name="product_id" />
+          </Key>
+          <Property Name="product_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="product_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="price" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="productType_id" Type="Int32" />
+          <Property Name="store" Type="Int32" Nullable="false" />
+          <Property Name="MakeAButton" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Bills" Relationship="Self.FK_Bill_product" FromRole="product" ToRole="Bill" />
+          <NavigationProperty Name="product_process" Relationship="Self.FK_product_process_product1" FromRole="product" ToRole="product_process" />
+          <NavigationProperty Name="product_type" Relationship="Self.FK_product_product_type" FromRole="product" ToRole="product_type" />
+        </EntityType>
+        <EntityType Name="product_process">
+          <Key>
+            <PropertyRef Name="id_proccess" />
+          </Key>
+          <Property Name="id_proccess" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="process_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="product_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="quantities" Type="Int32" />
+          <Property Name="price" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="date_time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IDproduct" Type="Int32" />
+          <Property Name="userID" Type="Int32" />
+          <NavigationProperty Name="Login" Relationship="Self.FK_product_process_Login" FromRole="product_process" ToRole="Login" />
+          <NavigationProperty Name="product" Relationship="Self.FK_product_process_product1" FromRole="product_process" ToRole="product" />
+        </EntityType>
+        <EntityType Name="product_type">
+          <Key>
+            <PropertyRef Name="type_id" />
+          </Key>
+          <Property Name="type_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="type_Name" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="products" Relationship="Self.FK_product_product_type" FromRole="product_type" ToRole="product" />
+        </EntityType>
+        <EntityType Name="safe">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="price" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="reason" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="product_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="quantity" Type="Int32" />
+          <Property Name="ReasonOfTake" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="personTake" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="user_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="date_time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="userID" Type="Int32" />
+          <Property Name="who_PersonAdd" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Login" Relationship="Self.FK_safe_Login" FromRole="safe" ToRole="Login" />
+        </EntityType>
+        <EntityType Name="Shift_Details">
+          <Key>
+            <PropertyRef Name="id_shift" />
+          </Key>
+          <Property Name="id_shift" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="shiftNu" Type="Int32" />
+          <Property Name="ToalBuy" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="TotalSell" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="profit" Type="Decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Timing">
+          <Key>
+            <PropertyRef Name="user_Name" />
+            <PropertyRef Name="Login_date_time" />
+          </Key>
+          <Property Name="user_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Login_date_time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Logout_date_time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="user_id" Type="Int32" />
+          <NavigationProperty Name="Login" Relationship="Self.FK_Timing_Login" FromRole="Timing" ToRole="Login" />
+        </EntityType>
+        <EntityType Name="User_shift">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="shiftNu" Type="Int32" />
+        </EntityType>
+        <Association Name="FK_Bill_product">
+          <End Role="product" Type="Self.product" Multiplicity="0..1" />
+          <End Role="Bill" Type="Self.Bill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product">
+              <PropertyRef Name="product_id" />
+            </Principal>
+            <Dependent Role="Bill">
+              <PropertyRef Name="IDproduct" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_product_process_Login">
+          <End Role="Login" Type="Self.Login" Multiplicity="0..1" />
+          <End Role="product_process" Type="Self.product_process" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Login">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="product_process">
+              <PropertyRef Name="userID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_safe_Login">
+          <End Role="Login" Type="Self.Login" Multiplicity="0..1" />
+          <End Role="safe" Type="Self.safe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Login">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="safe">
+              <PropertyRef Name="userID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Timing_Login">
+          <End Role="Login" Type="Self.Login" Multiplicity="0..1" />
+          <End Role="Timing" Type="Self.Timing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Login">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Timing">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_product_process_product1">
+          <End Role="product" Type="Self.product" Multiplicity="0..1" />
+          <End Role="product_process" Type="Self.product_process" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product">
+              <PropertyRef Name="product_id" />
+            </Principal>
+            <Dependent Role="product_process">
+              <PropertyRef Name="IDproduct" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_product_product_type">
+          <End Role="product_type" Type="Self.product_type" Multiplicity="0..1" />
+          <End Role="product" Type="Self.product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product_type">
+              <PropertyRef Name="type_id" />
+            </Principal>
+            <Dependent Role="product">
+              <PropertyRef Name="productType_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="cornerEntitiesDB" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="All_MonthlyExpenses" EntityType="Self.All_MonthlyExpenses" />
+          <EntitySet Name="Bills" EntityType="Self.Bill" />
+          <EntitySet Name="CloseDAys" EntityType="Self.CloseDAy" />
+          <EntitySet Name="CloseShifts" EntityType="Self.CloseShift" />
+          <EntitySet Name="Day_Details" EntityType="Self.Day_Details" />
+          <EntitySet Name="Logins" EntityType="Self.Login" />
+          <EntitySet Name="M_Expenses" EntityType="Self.M_Expenses" />
+          <EntitySet Name="Month_Details" EntityType="Self.Month_Details" />
+          <EntitySet Name="products" EntityType="Self.product" />
+          <EntitySet Name="product_process" EntityType="Self.product_process" />
+          <EntitySet Name="product_type" EntityType="Self.product_type" />
+          <EntitySet Name="safes" EntityType="Self.safe" />
+          <EntitySet Name="Shift_Details" EntityType="Self.Shift_Details" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <EntitySet Name="Timings" EntityType="Self.Timing" />
+          <EntitySet Name="User_shift" EntityType="Self.User_shift" />
+          <AssociationSet Name="FK_Bill_product" Association="Self.FK_Bill_product">
+            <End Role="product" EntitySet="products" />
+            <End Role="Bill" EntitySet="Bills" />
+          </AssociationSet>
+          <AssociationSet Name="FK_product_process_Login" Association="Self.FK_product_process_Login">
+            <End Role="Login" EntitySet="Logins" />
+            <End Role="product_process" EntitySet="product_process" />
+          </AssociationSet>
+          <AssociationSet Name="FK_safe_Login" Association="Self.FK_safe_Login">
+            <End Role="Login" EntitySet="Logins" />
+            <End Role="safe" EntitySet="safes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Timing_Login" Association="Self.FK_Timing_Login">
+            <End Role="Login" EntitySet="Logins" />
+            <End Role="Timing" EntitySet="Timings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_product_process_product1" Association="Self.FK_product_process_product1">
+            <End Role="product" EntitySet="products" />
+            <End Role="product_process" EntitySet="product_process" />
+          </AssociationSet>
+          <AssociationSet Name="FK_product_product_type" Association="Self.FK_product_product_type">
+            <End Role="product_type" EntitySet="product_type" />
+            <End Role="product" EntitySet="products" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="cornerModelStoreContainer" CdmEntityContainer="cornerEntitiesDB">
+          <EntitySetMapping Name="All_MonthlyExpenses">
+            <EntityTypeMapping TypeName="cornerModel.All_MonthlyExpenses">
+              <MappingFragment StoreEntitySet="All_MonthlyExpenses">
+                <ScalarProperty Name="idMExp" ColumnName="idMExp" />
+                <ScalarProperty Name="Exp_Name" ColumnName="Exp_Name" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="date_time" ColumnName="date_time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Bills">
+            <EntityTypeMapping TypeName="cornerModel.Bill">
+              <MappingFragment StoreEntitySet="Bill">
+                <ScalarProperty Name="id_bill" ColumnName="id_bill" />
+                <ScalarProperty Name="pro_name" ColumnName="pro_name" />
+                <ScalarProperty Name="pro_price" ColumnName="pro_price" />
+                <ScalarProperty Name="quality" ColumnName="quality" />
+                <ScalarProperty Name="tot_price" ColumnName="tot_price" />
+                <ScalarProperty Name="store" ColumnName="store" />
+                <ScalarProperty Name="IDproduct" ColumnName="IDproduct" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CloseDAys">
+            <EntityTypeMapping TypeName="cornerModel.CloseDAy">
+              <MappingFragment StoreEntitySet="CloseDAy">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="processT" ColumnName="processT" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="reason" ColumnName="reason" />
+                <ScalarProperty Name="proName" ColumnName="proName" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="ReasonOfT" ColumnName="ReasonOfT" />
+                <ScalarProperty Name="personT" ColumnName="personT" />
+                <ScalarProperty Name="userN" ColumnName="userN" />
+                <ScalarProperty Name="DTime" ColumnName="DTime" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="shiftNumber" ColumnName="shiftNumber" />
+                <ScalarProperty Name="whoPerson_add" ColumnName="whoPerson_add" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CloseShifts">
+            <EntityTypeMapping TypeName="cornerModel.CloseShift">
+              <MappingFragment StoreEntitySet="CloseShift">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="processT" ColumnName="processT" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="reason" ColumnName="reason" />
+                <ScalarProperty Name="proName" ColumnName="proName" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="ReasonOfTake" ColumnName="ReasonOfTake" />
+                <ScalarProperty Name="personTake" ColumnName="personTake" />
+                <ScalarProperty Name="userName" ColumnName="userName" />
+                <ScalarProperty Name="dateT" ColumnName="dateT" />
+                <ScalarProperty Name="userID" ColumnName="userID" />
+                <ScalarProperty Name="shiftNu" ColumnName="shiftNu" />
+                <ScalarProperty Name="whoPersonAdd" ColumnName="whoPersonAdd" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Day_Details">
+            <EntityTypeMapping TypeName="cornerModel.Day_Details">
+              <MappingFragment StoreEntitySet="Day_Details">
+                <ScalarProperty Name="id_day" ColumnName="id_day" />
+                <ScalarProperty Name="DAyNum" ColumnName="DAyNum" />
+                <ScalarProperty Name="TotalSell" ColumnName="TotalSell" />
+                <ScalarProperty Name="TotalBuy" ColumnName="TotalBuy" />
+                <ScalarProperty Name="profitDAy" ColumnName="profitDAy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Logins">
+            <EntityTypeMapping TypeName="cornerModel.Login">
+              <MappingFragment StoreEntitySet="Login">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="userName" ColumnName="userName" />
+                <ScalarProperty Name="pass" ColumnName="pass" />
+                <ScalarProperty Name="time_work" ColumnName="time_work" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="M_Expenses">
+            <EntityTypeMapping TypeName="cornerModel.M_Expenses">
+              <MappingFragment StoreEntitySet="M_Expenses">
+                <ScalarProperty Name="idExp" ColumnName="idExp" />
+                <ScalarProperty Name="Exp_name" ColumnName="Exp_name" />
+                <ScalarProperty Name="price" ColumnName="price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Month_Details">
+            <EntityTypeMapping TypeName="cornerModel.Month_Details">
+              <MappingFragment StoreEntitySet="Month_Details">
+                <ScalarProperty Name="id_Month" ColumnName="id_Month" />
+                <ScalarProperty Name="MonthNumber" ColumnName="MonthNumber" />
+                <ScalarProperty Name="TotalSell" ColumnName="TotalSell" />
+                <ScalarProperty Name="TotalBuy" ColumnName="TotalBuy" />
+                <ScalarProperty Name="profitMonth" ColumnName="profitMonth" />
+                <ScalarProperty Name="TotalMonthlyExpenses" ColumnName="TotalMonthlyExpenses" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="products">
+            <EntityTypeMapping TypeName="cornerModel.product">
+              <MappingFragment StoreEntitySet="product">
+                <ScalarProperty Name="product_id" ColumnName="product_id" />
+                <ScalarProperty Name="product_Name" ColumnName="product_Name" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="productType_id" ColumnName="productType_id" />
+                <ScalarProperty Name="store" ColumnName="store" />
+                <ScalarProperty Name="MakeAButton" ColumnName="MakeAButton" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="product_process">
+            <EntityTypeMapping TypeName="cornerModel.product_process">
+              <MappingFragment StoreEntitySet="product_process">
+                <ScalarProperty Name="id_proccess" ColumnName="id_proccess" />
+                <ScalarProperty Name="user_Name" ColumnName="user_Name" />
+                <ScalarProperty Name="process_type" ColumnName="process_type" />
+                <ScalarProperty Name="product_name" ColumnName="product_name" />
+                <ScalarProperty Name="quantities" ColumnName="quantities" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="date_time" ColumnName="date_time" />
+                <ScalarProperty Name="IDproduct" ColumnName="IDproduct" />
+                <ScalarProperty Name="userID" ColumnName="userID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="product_type">
+            <EntityTypeMapping TypeName="cornerModel.product_type">
+              <MappingFragment StoreEntitySet="product_type">
+                <ScalarProperty Name="type_id" ColumnName="type_id" />
+                <ScalarProperty Name="type_Name" ColumnName="type_Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="safes">
+            <EntityTypeMapping TypeName="cornerModel.safe">
+              <MappingFragment StoreEntitySet="safe">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="reason" ColumnName="reason" />
+                <ScalarProperty Name="product_name" ColumnName="product_name" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="ReasonOfTake" ColumnName="ReasonOfTake" />
+                <ScalarProperty Name="personTake" ColumnName="personTake" />
+                <ScalarProperty Name="user_name" ColumnName="user_name" />
+                <ScalarProperty Name="date_time" ColumnName="date_time" />
+                <ScalarProperty Name="userID" ColumnName="userID" />
+                <ScalarProperty Name="who_PersonAdd" ColumnName="who_PersonAdd" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Shift_Details">
+            <EntityTypeMapping TypeName="cornerModel.Shift_Details">
+              <MappingFragment StoreEntitySet="Shift_Details">
+                <ScalarProperty Name="id_shift" ColumnName="id_shift" />
+                <ScalarProperty Name="shiftNu" ColumnName="shiftNu" />
+                <ScalarProperty Name="ToalBuy" ColumnName="ToalBuy" />
+                <ScalarProperty Name="TotalSell" ColumnName="TotalSell" />
+                <ScalarProperty Name="profit" ColumnName="profit" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="cornerModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Timings">
+            <EntityTypeMapping TypeName="cornerModel.Timing">
+              <MappingFragment StoreEntitySet="Timing">
+                <ScalarProperty Name="user_Name" ColumnName="user_Name" />
+                <ScalarProperty Name="Login_date_time" ColumnName="Login_date_time" />
+                <ScalarProperty Name="Logout_date_time" ColumnName="Logout_date_time" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User_shift">
+            <EntityTypeMapping TypeName="cornerModel.User_shift">
+              <MappingFragment StoreEntitySet="User_shift">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="userN" ColumnName="userN" />
+                <ScalarProperty Name="shiftNu" ColumnName="shiftNu" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,33 @@
+# Build results
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Bb]uild/
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.v12.suo
+
+# NuGet
+packages/
+*.nupkg
+
+# Archives / backups
+*.rar
+*.zip
+
+# Rider / misc
+.idea/
+*.log
+
+# SQLite runtime data (portable DB is created next to the EXE at runtime)
+*.db
+*.db-shm
+*.db-wal

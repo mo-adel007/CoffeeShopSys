@@ -811,8 +811,10 @@
             this.shiftNu.Visible = false;
             // 
             // productBindingSource
-            // 
-            this.productBindingSource.DataSource = typeof(Corner_Application.product);
+            //
+            // (Was typed to the removed Entity Framework 'product' POCO. The grid is
+            //  populated from a DataTable at runtime, so an untyped source is fine.)
+            this.productBindingSource.DataSource = typeof(object);
             // 
             // worker
             // 

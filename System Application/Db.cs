@@ -19,9 +19,51 @@ namespace Corner_Application
     /// </summary>
     public static class Db
     {
-        /// <summary>Full path to the portable database file (next to the EXE).</summary>
-        public static readonly string DbPath =
-            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "corner.db");
+        /// <summary>
+        /// Full path to the portable database file. It now lives in the per-user
+        /// application-data folder (<c>%AppData%\CornerPos\corner.db</c>) rather than
+        /// next to the executable, so it is always writable even when the app is
+        /// unzipped into a read-only location such as Program Files. A database left
+        /// next to the executable by an older build is migrated across on first launch.
+        /// </summary>
+        public static readonly string DbPath = ResolveDbPath();
+
+        /// <summary>Directory that holds the database (created if missing).</summary>
+        public static string DataDirectory =>
+            Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "CornerPos");
+
+        private static string ResolveDbPath()
+        {
+            string dir = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "CornerPos");
+            Directory.CreateDirectory(dir);
+            string target = Path.Combine(dir, "corner.db");
+
+            // One-time migration: if an earlier build created corner.db beside the
+            // executable and we don't yet have one in AppData, move it (and its SQLite
+            // sidecar files) so the customer's existing data carries over intact.
+            string legacy = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "corner.db");
+            if (!File.Exists(target) && File.Exists(legacy))
+            {
+                try
+                {
+                    File.Move(legacy, target);
+                    foreach (string suffix in new[] { "-wal", "-shm", "-journal" })
+                        if (File.Exists(legacy + suffix))
+                            File.Move(legacy + suffix, target + suffix);
+                }
+                catch
+                {
+                    // If the move fails for any reason, fall back to a fresh database
+                    // in AppData rather than crashing at startup.
+                }
+            }
+
+            return target;
+        }
 
         /// <summary>ADO.NET connection string for the portable SQLite database.</summary>
         public static string ConnectionString()

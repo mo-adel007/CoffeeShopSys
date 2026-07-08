@@ -72,7 +72,9 @@
                                        FontSize="12" Margin="0,2,0,0"/>
                         </StackPanel>
                     </Border>
-                    <Button Content="تسجيل الخروج" Style="{StaticResource SidebarButton}" Margin="0,8,0,0"
+                    <Button Content="&#x1F511;   الترخيص" Style="{StaticResource SidebarButton}" Margin="0,8,0,0"
+                            Click="License_Click"/>
+                    <Button Content="تسجيل الخروج" Style="{StaticResource SidebarButton}" Margin="0,2,0,0"
                             Click="Logout_Click"/>
                 </StackPanel>
             </Grid>

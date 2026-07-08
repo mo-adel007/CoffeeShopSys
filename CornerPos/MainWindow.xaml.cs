@@ -167,6 +167,12 @@ namespace CornerPos
             };
         }
 
+        private void License_Click(object sender, RoutedEventArgs e)
+        {
+            // In-app renewal: enter a new key before the current one lapses.
+            new ActivationWindow(isGate: false) { Owner = this }.ShowDialog();
+        }
+
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
             new LoginWindow().Show();

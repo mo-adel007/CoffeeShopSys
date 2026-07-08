@@ -79,21 +79,8 @@
                 </Grid>
             </Border>
 
-            <!-- Content -->
-            <Grid Grid.Row="1" Margin="28">
-                <Border Background="{StaticResource CardBrush}" CornerRadius="16"
-                        BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
-                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <TextBlock x:Name="PageIcon" Text="&#x1F4B3;" FontSize="52" HorizontalAlignment="Center"
-                                   Foreground="{StaticResource CaramelBrush}"/>
-                        <TextBlock x:Name="PageBody" Text="Cashier screen" FontSize="18" FontWeight="SemiBold"
-                                   Foreground="{StaticResource TextBrush}" HorizontalAlignment="Center" Margin="0,14,0,0"/>
-                        <TextBlock Text="This screen is being rebuilt in the new modern interface."
-                                   FontSize="13" Foreground="{StaticResource MutedBrush}"
-                                   HorizontalAlignment="Center" Margin="0,6,0,0"/>
-                    </StackPanel>
-                </Border>
-            </Grid>
+            <!-- Content host: screens are swapped in here -->
+            <ContentControl x:Name="PageHost" Grid.Row="1"/>
         </Grid>
     </Grid>
 </Window>

@@ -59,6 +59,7 @@ namespace Corner_Application
                 }
 
                 SeedAdminIfEmpty(conn);
+                SeedMenuIfEmpty(conn);
             }
         }
 
@@ -85,6 +86,170 @@ namespace Corner_Application
                 insert.ExecuteNonQuery();
             }
         }
+
+        /// <summary>
+        /// Seed the coffee menu (7 categories + the shop's products) on a fresh
+        /// database so the cashier screen is usable immediately. Products are given a
+        /// placeholder price of 20 and stock of 100 — the owner adjusts both later in
+        /// the Products screen.
+        /// </summary>
+        private static void SeedMenuIfEmpty(SQLiteConnection conn)
+        {
+            long typeCount;
+            using (var check = new SQLiteCommand("SELECT COUNT(*) FROM product_type;", conn))
+                typeCount = Convert.ToInt64(check.ExecuteScalar());
+
+            if (typeCount == 0)
+            {
+                string[,] types =
+                {
+                    {"1", "قهوة"}, {"2", "شاى"}, {"3", "نسكافيه"}, {"4", "البن"},
+                    {"5", "waffle"}, {"6", "الثلاجة"}, {"7", "أخرى"}
+                };
+                using (var tx = conn.BeginTransaction())
+                {
+                    for (int i = 0; i < types.GetLength(0); i++)
+                        using (var cmd = new SQLiteCommand(
+                            "INSERT INTO product_type (type_id, type_name) VALUES (@id, @name);", conn))
+                        {
+                            cmd.Parameters.AddWithValue("@id", int.Parse(types[i, 0]));
+                            cmd.Parameters.AddWithValue("@name", types[i, 1]);
+                            cmd.ExecuteNonQuery();
+                        }
+                    tx.Commit();
+                }
+            }
+
+            long prodCount;
+            using (var check = new SQLiteCommand("SELECT COUNT(*) FROM product;", conn))
+                prodCount = Convert.ToInt64(check.ExecuteScalar());
+
+            if (prodCount == 0)
+            {
+                using (var tx = conn.BeginTransaction())
+                {
+                    foreach (var raw in MenuData.Split('\n'))
+                    {
+                        string line = raw.Trim();
+                        if (line.Length == 0) continue;
+                        int bar = line.IndexOf('|');
+                        int typeId = int.Parse(line.Substring(0, bar));
+                        string name = line.Substring(bar + 1);
+                        using (var cmd = new SQLiteCommand(
+                            "INSERT INTO product (Product_name, Price, ProductType_id, Store, MakeAButton) " +
+                            "VALUES (@name, 20, @type, 100, 1);", conn))
+                        {
+                            cmd.Parameters.AddWithValue("@name", name);
+                            cmd.Parameters.AddWithValue("@type", typeId);
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                    tx.Commit();
+                }
+            }
+        }
+
+        // typeId|productName — the shop's original menu (price/stock are placeholders).
+        private const string MenuData = @"
+1|قهوة تركى
+1|قهوة تركى دوبل
+1|قهوة اسبريسو
+1|قهوة اسبريسو دوبل
+1|قهوة بندق
+1|قهوة بالكريم الايرلندى
+1|قهوة فرنساوى
+1|قهوة فرنساوى دوبل
+1|قهوة كراميل
+1|قهوة لوز
+1|قهوة فستق
+1|قهوة شيكولاته
+1|قهوة فانيليا
+1|قهوة ميكس
+1|قهوة نكهات دوبل
+1|قهوة قرفة
+3|نسكافيه
+3|نسكافيه بلاك
+3|نسكافيه كراميل
+3|نسكافيه جولد
+3|كوفى ميكس
+3|كابتشينو ماكينة
+3|كابتشينو كلاسيك
+3|كابتشينو بندق
+3|كابتشينو فانيليا
+3|كابتشينو موكا
+3|كابتشينو شيكولاته
+3|نسكويك
+3|لاتيه
+3|موكا
+3|هوت شوكلت
+3|شوكو ميلك
+3|ماكياتو
+3|فرابينو بالفانيليا
+3|فرابينو بالكراميل
+2|شاى
+2|شاى لاتيه شيكولاته
+2|شاى تفاح
+2|شاى مانجو
+2|شاى توت
+2|شاى فانيليا
+2|شاى مشمش
+2|شاى مانجو و خوخ
+2|شاى توت برى
+2|شاى توت و فراولة
+2|شاى خوخ
+2|شاى خوخ و فواكه استوائية
+2|شاى فراولة
+2|شاى فراولة و كيوى
+2|شاى فراولة و رمان
+2|شاى توت و رمان
+2|شاى عدنى
+2|شاى ياسمين
+2|شاى اخضر
+2|شاى اخضر بالياسمين
+2|شاى إيرل جراى
+2|شاى بالليمون
+7|ينسون
+7|كركديه
+7|نعناع
+7|نعناع بالكاموميل
+7|جنزبيل
+7|كراويه
+7|ليمون بالجنزبيل
+7|قرفة
+7|تليو
+7|جنزبيل بالقرفة
+5|waffle basic
+2|شاى فواكة برية
+2|شاى خوخ وورد
+4|سادة فاتح
+4|سادة وسط
+4|سادة غامق
+4|سادة محروق
+4|محوج فاتح
+4|محوج وسط
+4|محوج غامق
+4|محوج محروق
+4|كولومبى
+4|حبشى
+3|نسكافية فانيليا
+3|نسكافية بندق
+2|شاى بالنعناع
+2|شاى بالقرنفل
+3|لاتية كراميل
+2|شاى مغربى
+1|قهوة كولومبى
+1|قهوة حبشى
+6|مياة كبير
+6|مياة صغير
+6|كانز كبير
+6|فروتز
+6|لبن
+2|اضافة حليب
+3|نسكافية موكا
+1|قهوة تركى محوج
+1|قهوة تركى محوج دوبل
+1|قهوة بالحليب
+";
 
         /// <summary>
         /// SQLite schema, converted from the original MariaDB dump (System.sql).

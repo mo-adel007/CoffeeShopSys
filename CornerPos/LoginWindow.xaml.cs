@@ -72,13 +72,16 @@ namespace CornerPos
                     return;
                 }
 
+                int userId = Convert.ToInt32(row["id"]);
                 if (Security.IsLegacyPlaintext(stored))
-                    UpgradeHash(Convert.ToString(row["id"]), pass);
+                    UpgradeHash(userId.ToString(), pass);
 
                 string name = Convert.ToString(row["username"]);
                 string role = Convert.ToString(row["time_work"]);
 
-                var main = new MainWindow(name, role);
+                // Shift 1 for now; real shift assignment/close is ported with the
+                // close-shift screen. Sales are still tagged with this shift number.
+                var main = new MainWindow(userId, name, role, 1);
                 main.Show();
                 Close();
             }

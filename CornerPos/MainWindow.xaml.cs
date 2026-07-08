@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
 
@@ -8,24 +9,29 @@ namespace CornerPos
 {
     /// <summary>
     /// Application shell shown after login: espresso sidebar navigation, a header,
-    /// and a content area. The individual screens (cashier, products, reports…) are
-    /// being ported into this shell; for now each shows a placeholder so the layout
-    /// and navigation can be reviewed.
+    /// and a content host into which each screen is swapped. The Cashier screen is
+    /// live; the remaining screens show a placeholder until they are ported.
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly int _userId;
+        private readonly string _userName;
         private readonly string _role;
+        private readonly int _shift;
+        private CashierView _cashier;
 
-        public MainWindow(string userName, string role)
+        public MainWindow(int userId, string userName, string role, int shift)
         {
             InitializeComponent();
+            _userId = userId;
+            _userName = userName ?? "";
             _role = role ?? "";
+            _shift = shift;
 
-            UserName.Text = string.IsNullOrEmpty(userName) ? "User" : userName;
+            UserName.Text = string.IsNullOrEmpty(_userName) ? "User" : _userName;
             bool isAdmin = string.Equals(_role, "admin", StringComparison.OrdinalIgnoreCase);
             UserRole.Text = isAdmin ? "Administrator" : "Cashier";
 
-            // A cashier only needs the till; hide the back-office sections.
             if (!isAdmin)
             {
                 NavProducts.Visibility = Visibility.Collapsed;
@@ -34,33 +40,78 @@ namespace CornerPos
                 NavUsers.Visibility = Visibility.Collapsed;
             }
 
-            ShowPage("Cashier", "\U0001F4B3", "Take orders and manage the current shift");
-
+            GoTo("Cashier", "Take orders and manage the current shift");
             SourceInitialized += (s, e) => TintTitleBar();
         }
 
         private void Nav_Click(object sender, RoutedEventArgs e)
         {
-            var btn = sender as System.Windows.Controls.Button;
+            var btn = sender as Button;
             if (btn == null) return;
             string page = Convert.ToString(btn.Tag);
             switch (page)
             {
-                case "Cashier":            ShowPage(page, "\U0001F4B3", "Take orders and manage the current shift"); break;
-                case "Products":           ShowPage(page, "☕", "Manage the menu, prices and stock"); break;
-                case "Sales & Reports":    ShowPage(page, "\U0001F4C8", "Daily, shift and monthly sales at a glance"); break;
-                case "Expenses":           ShowPage(page, "\U0001F4B0", "Record and review shop expenses"); break;
-                case "Users":              ShowPage(page, "\U0001F465", "Manage staff logins and access"); break;
-                default:                   ShowPage(page, "☕", ""); break;
+                case "Cashier":         GoTo(page, "Take orders and manage the current shift"); break;
+                case "Products":        GoTo(page, "Manage the menu, prices and stock"); break;
+                case "Sales & Reports": GoTo(page, "Daily, shift and monthly sales at a glance"); break;
+                case "Expenses":        GoTo(page, "Record and review shop expenses"); break;
+                case "Users":           GoTo(page, "Manage staff logins and access"); break;
+                default:                GoTo(page, ""); break;
             }
         }
 
-        private void ShowPage(string title, string icon, string subtitle)
+        private void GoTo(string title, string subtitle)
         {
             PageTitle.Text = title;
             PageSubtitle.Text = subtitle;
-            PageIcon.Text = icon;
-            PageBody.Text = title + " screen";
+
+            if (title == "Cashier")
+            {
+                if (_cashier == null) _cashier = new CashierView(_userId, _userName, _shift);
+                PageHost.Content = _cashier;
+            }
+            else
+            {
+                PageHost.Content = Placeholder(title);
+            }
+        }
+
+        private UIElement Placeholder(string title)
+        {
+            var stack = new StackPanel { VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Center };
+            stack.Children.Add(new TextBlock
+            {
+                Text = "☕",
+                FontSize = 52,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Foreground = (Brush)FindResource("CaramelBrush")
+            });
+            stack.Children.Add(new TextBlock
+            {
+                Text = title + " screen",
+                FontSize = 18,
+                FontWeight = FontWeights.SemiBold,
+                Margin = new Thickness(0, 14, 0, 0),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Foreground = (Brush)FindResource("TextBrush")
+            });
+            stack.Children.Add(new TextBlock
+            {
+                Text = "This screen is being rebuilt in the new interface.",
+                FontSize = 13,
+                Margin = new Thickness(0, 6, 0, 0),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Foreground = (Brush)FindResource("MutedBrush")
+            });
+            return new Border
+            {
+                Margin = new Thickness(28),
+                CornerRadius = new CornerRadius(16),
+                Background = (Brush)FindResource("CardBrush"),
+                BorderBrush = (Brush)FindResource("BorderBrush"),
+                BorderThickness = new Thickness(1),
+                Child = stack
+            };
         }
 
         private void Logout_Click(object sender, RoutedEventArgs e)
@@ -89,9 +140,6 @@ namespace CornerPos
             catch { /* pre-Windows 11: ignore */ }
         }
 
-        private static int ToColorRef(Color c)
-        {
-            return (c.B << 16) | (c.G << 8) | c.R; // 0x00BBGGRR
-        }
+        private static int ToColorRef(Color c) => (c.B << 16) | (c.G << 8) | c.R;
     }
 }

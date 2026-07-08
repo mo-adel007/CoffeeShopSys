@@ -120,6 +120,106 @@
         </Setter>
     </Style>
 
+    <!-- ============ Product tile ============ -->
+    <Style x:Key="TileButton" TargetType="Button">
+        <Setter Property="FontFamily" Value="{StaticResource AppFont}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="bd" Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}"
+                            BorderThickness="1.5" CornerRadius="12" Padding="8">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="{StaticResource CreamBrush}"/>
+                            <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource CaramelBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="{StaticResource CaramelBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ============ Category chip ============ -->
+    <Style x:Key="ChipButton" TargetType="Button">
+        <Setter Property="FontFamily" Value="{StaticResource AppFont}"/>
+        <Setter Property="Foreground" Value="{StaticResource MochaBrush}"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Height" Value="34"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="bd" Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}"
+                            BorderThickness="1.5" CornerRadius="17" Padding="16,0">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource CaramelBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ============ Quantity +/- button ============ -->
+    <Style x:Key="QtyButton" TargetType="Button">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Width" Value="26"/>
+        <Setter Property="Height" Value="26"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="bd" Background="{StaticResource MochaBrush}" CornerRadius="13">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="{StaticResource CaramelBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ============ Ghost (outline) button ============ -->
+    <Style x:Key="GhostButton" TargetType="Button">
+        <Setter Property="FontFamily" Value="{StaticResource AppFont}"/>
+        <Setter Property="Foreground" Value="{StaticResource MochaBrush}"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="bd" Background="Transparent" BorderBrush="{StaticResource BorderBrush}"
+                            BorderThickness="1.5" CornerRadius="10">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="{StaticResource CreamBrush}"/>
+                            <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource CaramelBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- ============ Window control (close) button ============ -->
     <Style x:Key="IconButton" TargetType="Button">
         <Setter Property="Foreground" Value="White"/>

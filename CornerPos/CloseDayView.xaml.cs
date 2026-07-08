@@ -56,8 +56,9 @@ namespace CornerPos
             {
                 int dayNum = Convert.ToInt32(Data.Scalar("SELECT COUNT(*) FROM day_details;")) + 1;
                 Data.Execute(
-                    "INSERT INTO day_details (DayNum, TotalSell, TotalBuy, ProfitDay) VALUES (@d,@ts,@tb,@p);",
-                    ("@d", dayNum), ("@ts", _sales), ("@tb", _out), ("@p", _sales - _out));
+                    "INSERT INTO day_details (DayNum, TotalSell, TotalBuy, TotalDeposits, ProfitDay) " +
+                    "VALUES (@d,@ts,@tb,@dep,@p);",
+                    ("@d", dayNum), ("@ts", _sales), ("@tb", _out), ("@dep", _deposits), ("@p", _sales - _out));
 
                 // Day cascade: clear the day's aggregation + the shift tables.
                 Data.Execute("DELETE FROM close_day;");

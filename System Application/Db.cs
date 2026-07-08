@@ -60,7 +60,35 @@ namespace Corner_Application
 
                 SeedAdminIfEmpty(conn);
                 SeedMenuIfEmpty(conn);
+                Migrate(conn);
             }
+        }
+
+        /// <summary>
+        /// Lightweight forward migrations for databases created by an earlier version.
+        /// Adds columns that newer features need (SQLite has no ADD COLUMN IF NOT EXISTS).
+        /// </summary>
+        private static void Migrate(SQLiteConnection conn)
+        {
+            // Deposits are carried separately through the day/month roll-up so they
+            // stay isolated from product sales in Close Month.
+            EnsureColumn(conn, "day_details", "TotalDeposits", "REAL");
+            EnsureColumn(conn, "month_details", "TotalDeposits", "REAL");
+        }
+
+        private static void EnsureColumn(SQLiteConnection conn, string table, string column, string type)
+        {
+            bool exists = false;
+            using (var cmd = new SQLiteCommand("PRAGMA table_info(" + table + ");", conn))
+            using (var r = cmd.ExecuteReader())
+                while (r.Read())
+                    if (string.Equals(Convert.ToString(r["name"]), column, StringComparison.OrdinalIgnoreCase))
+                    { exists = true; break; }
+
+            if (!exists)
+                using (var cmd = new SQLiteCommand(
+                    "ALTER TABLE " + table + " ADD COLUMN " + column + " " + type + ";", conn))
+                    cmd.ExecuteNonQuery();
         }
 
         /// <summary>
@@ -316,6 +344,7 @@ CREATE TABLE IF NOT EXISTS day_details (
   DayNum INTEGER,
   TotalSell REAL,
   TotalBuy REAL,
+  TotalDeposits REAL,
   ProfitDay REAL
 );
 
@@ -337,6 +366,7 @@ CREATE TABLE IF NOT EXISTS month_details (
   MonthNumber INTEGER,
   TotalSell REAL,
   TotalBuy REAL,
+  TotalDeposits REAL,
   ProfitDay REAL,
   TotalMonthlyExpenses REAL
 );

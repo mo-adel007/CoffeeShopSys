@@ -68,8 +68,17 @@ namespace CornerPos
 
             string name = (NameBox.Text ?? "").Trim();
 
-            // Map the operation to the shared column values (mirrors the legacy Ch* methods).
-            string processT = op == "Deposit" ? "sell" : "buy";
+            // Each movement gets its OWN category so it is never mixed with product
+            // sales (which use processT='sale'). Sales and cash movements are separate
+            // ledgers in the close screens.
+            string processT;
+            switch (op)
+            {
+                case "Deposit":    processT = "deposit"; break;
+                case "Withdrawal": processT = "withdrawal"; break;
+                case "Buy goods":  processT = "purchase"; break;
+                default:           processT = "expense"; break; // Other expense
+            }
             string reason = "", proName = "", reasonOfT = "", personTake = "", whoAdd = "";
             int qty = 0;
 

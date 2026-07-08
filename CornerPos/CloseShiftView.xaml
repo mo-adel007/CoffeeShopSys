@@ -1,6 +1,7 @@
 <UserControl x:Class="CornerPos.CloseShiftView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             FontFamily="{StaticResource AppFont}"
              Background="{StaticResource CreamBrush}">
 
     <Grid Margin="24">
@@ -11,11 +12,10 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Title -->
-        <TextBlock Grid.Row="0" Text="تقفيل الوردية" FontFamily="Segoe UI" FontSize="24"
-                   FontWeight="SemiBold" Foreground="{StaticResource EspressoBrush}" Margin="0,0,0,16"/>
+        <TextBlock Grid.Row="0" Text="تقفيل الوردية" FontSize="24" FontWeight="SemiBold"
+                   Foreground="{StaticResource EspressoBrush}" Margin="0,0,0,16"/>
 
-        <!-- Total cards -->
+        <!-- Total cards: sales isolated from cash movements -->
         <Grid Grid.Row="1" Margin="0,0,0,20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -25,37 +25,34 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Income (caramel/espresso) -->
             <Border Grid.Column="0" Background="{StaticResource CaramelBrush}" CornerRadius="12" Padding="20">
                 <StackPanel>
-                    <TextBlock Text="الإيراد" FontFamily="Segoe UI" FontSize="14" Foreground="White" Opacity="0.9"/>
-                    <TextBlock x:Name="IncomeText" Text="0.00" FontFamily="Segoe UI" FontSize="28"
-                               FontWeight="Bold" Foreground="White" Margin="0,6,0,0"/>
+                    <TextBlock Text="مبيعات المنتجات" FontSize="14" Foreground="White" Opacity="0.9"/>
+                    <TextBlock x:Name="SalesText" Text="0.00" FontSize="28" FontWeight="Bold"
+                               Foreground="White" Margin="0,6,0,0"/>
                 </StackPanel>
             </Border>
 
-            <!-- Expenses -->
             <Border Grid.Column="2" Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}"
                     BorderThickness="1.5" CornerRadius="12" Padding="20">
                 <StackPanel>
-                    <TextBlock Text="المصروفات" FontFamily="Segoe UI" FontSize="14" Foreground="{StaticResource MutedBrush}"/>
-                    <TextBlock x:Name="ExpensesText" Text="0.00" FontFamily="Segoe UI" FontSize="28"
-                               FontWeight="Bold" Foreground="{StaticResource TextBrush}" Margin="0,6,0,0"/>
+                    <TextBlock Text="إيداعات الخزنة" FontSize="14" Foreground="{StaticResource MutedBrush}"/>
+                    <TextBlock x:Name="DepositsText" Text="0.00" FontSize="28" FontWeight="Bold"
+                               Foreground="{StaticResource TextBrush}" Margin="0,6,0,0"/>
                 </StackPanel>
             </Border>
 
-            <!-- Net -->
             <Border Grid.Column="4" Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}"
                     BorderThickness="1.5" CornerRadius="12" Padding="20">
                 <StackPanel>
-                    <TextBlock Text="الصافي" FontFamily="Segoe UI" FontSize="14" Foreground="{StaticResource MutedBrush}"/>
-                    <TextBlock x:Name="NetText" Text="0.00" FontFamily="Segoe UI" FontSize="28"
-                               FontWeight="Bold" Foreground="{StaticResource EspressoBrush}" Margin="0,6,0,0"/>
+                    <TextBlock Text="مصروفات ومسحوبات" FontSize="14" Foreground="{StaticResource MutedBrush}"/>
+                    <TextBlock x:Name="OutText" Text="0.00" FontSize="28" FontWeight="Bold"
+                               Foreground="{StaticResource DangerBrush}" Margin="0,6,0,0"/>
                 </StackPanel>
             </Border>
         </Grid>
 
-        <!-- Two grids side by side -->
+        <!-- Two isolated ledgers -->
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -63,33 +60,28 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Sales -->
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" Text="المبيعات" FontFamily="Segoe UI" FontSize="16" FontWeight="SemiBold"
+                <TextBlock Grid.Row="0" Text="مبيعات المنتجات" FontSize="16" FontWeight="SemiBold"
                            Foreground="{StaticResource TextBrush}" Margin="0,0,0,8"/>
-                <DataGrid Grid.Row="1" x:Name="SellsGrid" Style="{StaticResource ModernDataGrid}"
-                          AutoGenerateColumns="True"/>
+                <DataGrid Grid.Row="1" x:Name="SellsGrid" Style="{StaticResource ModernDataGrid}" AutoGenerateColumns="True"/>
             </Grid>
 
-            <!-- Purchases -->
             <Grid Grid.Column="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" Text="المشتريات" FontFamily="Segoe UI" FontSize="16" FontWeight="SemiBold"
+                <TextBlock Grid.Row="0" Text="حركة الخزنة (إيداع / سحب / مصروفات)" FontSize="16" FontWeight="SemiBold"
                            Foreground="{StaticResource TextBrush}" Margin="0,0,0,8"/>
-                <DataGrid Grid.Row="1" x:Name="BuysGrid" Style="{StaticResource ModernDataGrid}"
-                          AutoGenerateColumns="True"/>
+                <DataGrid Grid.Row="1" x:Name="MovesGrid" Style="{StaticResource ModernDataGrid}" AutoGenerateColumns="True"/>
             </Grid>
         </Grid>
 
-        <!-- Close shift button -->
         <Button Grid.Row="3" x:Name="CloseBtn" Content="تقفيل الوردية" Style="{StaticResource PrimaryButton}"
-                Width="220" HorizontalAlignment="Right" Margin="0,20,0,0" Click="Close_Click"/>
+                Width="220" HorizontalAlignment="Left" Margin="0,20,0,0" Click="Close_Click"/>
     </Grid>
 </UserControl>

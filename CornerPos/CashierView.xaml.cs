@@ -150,9 +150,9 @@ namespace CornerPos
                             decimal line = item.LineTotal;
 
                             Exec(conn, "INSERT INTO close_shift (processT,price,proName,quantity,UserN,Dtime,Userid,ShiftNumber) " +
-                                       "VALUES ('sell',@price,@name,@qty,@user,@dt,@uid,@shift);", item, line, now);
+                                       "VALUES ('sale',@price,@name,@qty,@user,@dt,@uid,@shift);", item, line, now);
                             Exec(conn, "INSERT INTO close_day (processT,price,proName,quantity,UserN,Dtime,Userid,ShiftNumber) " +
-                                       "VALUES ('sell',@price,@name,@qty,@user,@dt,@uid,@shift);", item, line, now);
+                                       "VALUES ('sale',@price,@name,@qty,@user,@dt,@uid,@shift);", item, line, now);
 
                             using (var pp = new SQLiteCommand(
                                 "INSERT INTO product_process (User_Name,Process_type,Product_name,quantity,price,\"DateTime\",IdProduct,UserId) " +

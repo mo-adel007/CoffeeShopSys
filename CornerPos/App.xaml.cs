@@ -42,7 +42,7 @@ namespace CornerPos
 
             if (license.WarnSoon)
                 MessageBox.Show(
-                    "ينتهي الترخيص خلال " + license.DaysLeft + " يوم. برجاء التجديد لتفادي التوقف.",
+                    "تنتهي الفترة التجريبية خلال " + license.DaysLeft + " يوم. أدخل مفتاح الترخيص للمتابعة بعدها.",
                     "الترخيص", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
     }

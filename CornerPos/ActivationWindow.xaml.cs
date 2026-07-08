@@ -33,14 +33,13 @@ namespace CornerPos
             switch (s.State)
             {
                 case LicenseState.Licensed:
-                    StatusText.Text = "الترخيص مُفعّل — ينتهي خلال " + s.DaysLeft + " يوم"
-                        + (s.Expiry.HasValue ? " (" + s.Expiry.Value.ToString("yyyy-MM-dd") + ")" : "");
+                    StatusText.Text = "الترخيص مُفعّل.";
                     break;
                 case LicenseState.Trial:
                     StatusText.Text = "النسخة التجريبية — متبقٍّ " + s.DaysLeft + " يوم";
                     break;
                 default:
-                    StatusText.Text = "انتهت الفترة التجريبية / الترخيص. أدخل مفتاحًا صالحًا للمتابعة.";
+                    StatusText.Text = "انتهت الفترة التجريبية. أدخل مفتاح الترخيص للمتابعة.";
                     break;
             }
         }

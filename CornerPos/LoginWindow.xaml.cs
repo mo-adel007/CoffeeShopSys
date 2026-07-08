@@ -84,7 +84,7 @@ namespace CornerPos
                 int shift = string.Equals(role, "admin", StringComparison.OrdinalIgnoreCase)
                     ? 0 : Shift.AssignForCashier(name);
 
-                var main = new MainWindow(userId, name, role, shift);
+                var main = new MainWindow(userId, name, role, shift, DateTime.Now);
                 main.Show();
                 Close();
             }

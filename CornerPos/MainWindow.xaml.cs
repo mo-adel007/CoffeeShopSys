@@ -18,16 +18,18 @@ namespace CornerPos
         private readonly string _userName;
         private readonly string _role;
         private readonly int _shift;
+        private readonly DateTime _loginTime;
         private CashierView _cashier;
         private string _mode = "cashier"; // "admin" or "cashier"
 
-        public MainWindow(int userId, string userName, string role, int shift)
+        public MainWindow(int userId, string userName, string role, int shift, DateTime loginTime)
         {
             InitializeComponent();
             _userId = userId;
             _userName = userName ?? "";
             _role = role ?? "";
             _shift = shift;
+            _loginTime = loginTime;
 
             UserName.Text = string.IsNullOrEmpty(_userName) ? "User" : _userName;
             bool isAdmin = string.Equals(_role, "admin", StringComparison.OrdinalIgnoreCase);
@@ -88,7 +90,7 @@ namespace CornerPos
             switch (title)
             {
                 case "Cashier":
-                    if (_cashier == null) _cashier = new CashierView(_userId, _userName, _shift);
+                    if (_cashier == null) _cashier = new CashierView(_userId, _userName, _shift, _loginTime);
                     PageHost.Content = _cashier;
                     break;
                 case "Products":
@@ -107,7 +109,7 @@ namespace CornerPos
                     PageHost.Content = new DailyMovementView(_userId, _userName, _shift);
                     break;
                 case "Close Shift":
-                    PageHost.Content = new CloseShiftView(_shift);
+                    PageHost.Content = new CloseShiftView(_shift, _userId);
                     break;
                 case "Close Day":
                     PageHost.Content = new CloseDayView();

@@ -22,21 +22,25 @@ namespace CornerPos
         private readonly int _userId;
         private readonly string _userName;
         private readonly int _shift;
+        private readonly DateTime _loginTime;
         private readonly ObservableCollection<CartItem> _cart = new ObservableCollection<CartItem>();
 
-        public CashierView(int userId, string userName, int shift)
+        public CashierView(int userId, string userName, int shift, DateTime loginTime)
         {
             InitializeComponent();
             _userId = userId;
             _userName = userName ?? "";
             _shift = shift;
+            _loginTime = loginTime;
 
+            ShiftUser.Text = string.IsNullOrEmpty(_userName) ? "Cashier" : _userName;
             CartList.ItemsSource = _cart;
             _cart.CollectionChanged += (s, e) => Refresh();
 
             LoadCategories();
             LoadProducts(0);
             Refresh();
+            RefreshShift();
         }
 
         // ---------- data loading ----------
@@ -119,7 +123,11 @@ namespace CornerPos
             Refresh();
         }
 
-        private void Clear_Click(object sender, RoutedEventArgs e) => _cart.Clear();
+        private void Clear_Click(object sender, RoutedEventArgs e)
+        {
+            _cart.Clear();
+            CashBox.Text = "";
+        }
 
         private void Charge_Click(object sender, RoutedEventArgs e)
         {
@@ -175,7 +183,9 @@ namespace CornerPos
                 MessageBox.Show("Order charged: " + Total().ToString("0.00"), "Corner",
                     MessageBoxButton.OK, MessageBoxImage.Information);
                 _cart.Clear();
+                CashBox.Text = "";
                 LoadProducts(0);
+                RefreshShift();
             }
             catch (Exception ex)
             {
@@ -204,7 +214,35 @@ namespace CornerPos
         {
             TotalText.Text = Total().ToString("0.00");
             EmptyHint.Visibility = _cart.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+            UpdateChange();
         }
+
+        /// <summary>Refresh the "your shift" panel — this cashier's own sales since login.</summary>
+        private void RefreshShift()
+        {
+            string cut = _loginTime.ToString("s");
+            decimal amt = ToDec(Data.Scalar(
+                "SELECT COALESCE(SUM(price),0) FROM product_process WHERE UserId=@u AND Process_type='sell' AND \"DateTime\">=@t;",
+                ("@u", _userId), ("@t", cut)));
+            int cnt = Convert.ToInt32(ToDec(Data.Scalar(
+                "SELECT COALESCE(SUM(quantity),0) FROM product_process WHERE UserId=@u AND Process_type='sell' AND \"DateTime\">=@t;",
+                ("@u", _userId), ("@t", cut))));
+            ShiftAmount.Text = amt.ToString("0.00");
+            ShiftCount.Text = cnt + " items";
+        }
+
+        private void Cash_Changed(object sender, TextChangedEventArgs e) => UpdateChange();
+
+        private void UpdateChange()
+        {
+            if (ChangeText == null) return; // during InitializeComponent
+            decimal received;
+            decimal.TryParse((CashBox.Text ?? "").Trim(), out received);
+            ChangeText.Text = (received - Total()).ToString("0.00");
+        }
+
+        private static decimal ToDec(object o) =>
+            o == null || o == DBNull.Value ? 0m : Convert.ToDecimal(o);
 
         // ---------- models ----------
         private class Category { public int Id { get; set; } public string Name { get; set; } }

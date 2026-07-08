@@ -51,17 +51,46 @@
         <Border Grid.Column="1" Background="{StaticResource CardBrush}" CornerRadius="16"
                 BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
             <DockPanel Margin="18">
+                <!-- Your-shift panel: this cashier's own sales since login -->
+                <Border DockPanel.Dock="Top" Background="{StaticResource EspressoBrush}" CornerRadius="12"
+                        Padding="14,10" Margin="0,0,0,14">
+                    <Grid>
+                        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
+                            <TextBlock x:Name="ShiftUser" Text="Cashier" Foreground="White" FontWeight="SemiBold" FontSize="14"/>
+                            <TextBlock Text="Your shift" Foreground="{StaticResource CaramelBrush}" FontSize="11"/>
+                        </StackPanel>
+                        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <TextBlock x:Name="ShiftAmount" Text="0.00" Foreground="White" FontWeight="Bold"
+                                       FontSize="18" TextAlignment="Right"/>
+                            <TextBlock x:Name="ShiftCount" Text="0 items" Foreground="{StaticResource CaramelBrush}"
+                                       FontSize="11" TextAlignment="Right"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
                 <TextBlock DockPanel.Dock="Top" Text="Current Order" FontSize="18" FontWeight="Bold"
                            Foreground="{StaticResource EspressoBrush}" Margin="0,0,0,12"/>
 
-                <!-- Footer: total + actions -->
+                <!-- Footer: total + change calculator + actions -->
                 <StackPanel DockPanel.Dock="Bottom">
                     <Border Height="1" Background="{StaticResource BorderBrush}" Margin="0,10"/>
-                    <Grid Margin="2,0,2,12">
+                    <Grid Margin="2,0,2,10">
                         <TextBlock Text="Total" FontSize="16" FontWeight="SemiBold"
-                                   Foreground="{StaticResource TextBrush}" HorizontalAlignment="Left"/>
+                                   Foreground="{StaticResource TextBrush}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                         <TextBlock x:Name="TotalText" Text="0.00" FontSize="22" FontWeight="Bold"
                                    Foreground="{StaticResource EspressoBrush}" HorizontalAlignment="Right"/>
+                    </Grid>
+                    <Grid Margin="2,0,2,8">
+                        <TextBlock Text="Cash received" FontSize="13" Foreground="{StaticResource MutedBrush}"
+                                   HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <TextBox x:Name="CashBox" Width="120" Height="36" HorizontalAlignment="Right"
+                                 Style="{StaticResource ModernTextBox}" TextChanged="Cash_Changed"/>
+                    </Grid>
+                    <Grid Margin="2,0,2,12">
+                        <TextBlock Text="Change" FontSize="14" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextBrush}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="ChangeText" Text="0.00" FontSize="18" FontWeight="Bold"
+                                   Foreground="{StaticResource CaramelBrush}" HorizontalAlignment="Right"/>
                     </Grid>
                     <Button Content="Charge" Style="{StaticResource PrimaryButton}" Click="Charge_Click"/>
                     <Button Content="Clear order" Style="{StaticResource GhostButton}" Margin="0,8,0,0" Click="Clear_Click"/>

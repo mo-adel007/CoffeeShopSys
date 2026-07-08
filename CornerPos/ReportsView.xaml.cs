@@ -80,10 +80,10 @@ namespace CornerPos
         {
             int typeId = NameBox.SelectedValue == null ? 0 : Convert.ToInt32(NameBox.SelectedValue);
             var dt = Data.Query(
-                "SELECT pp.Product_name AS Product, SUM(pp.quantity) AS Qty, SUM(pp.price) AS Total " +
+                "SELECT pp.Product_name AS Product, pp.User_Name AS Cashier, SUM(pp.quantity) AS Qty, SUM(pp.price) AS Total " +
                 "FROM product_process pp JOIN product p ON p.Product_id = pp.IdProduct " +
                 "WHERE p.ProductType_id=@t AND pp.Process_type='sell' AND pp.\"DateTime\" BETWEEN @from AND @to " +
-                "GROUP BY pp.Product_name ORDER BY Total DESC;",
+                "GROUP BY pp.Product_name, pp.User_Name ORDER BY Total DESC;",
                 ("@t", typeId), ("@from", from), ("@to", to));
             Grid.ItemsSource = dt.DefaultView;
             Summary.Text = "Total sales: " + Sum(dt, "Total").ToString("0.00");
@@ -95,15 +95,15 @@ namespace CornerPos
             DataTable dt;
             if (productId == 0)
                 dt = Data.Query(
-                    "SELECT Product_name AS Product, SUM(quantity) AS Qty, SUM(price) AS Total " +
+                    "SELECT Product_name AS Product, User_Name AS Cashier, SUM(quantity) AS Qty, SUM(price) AS Total " +
                     "FROM product_process WHERE Process_type='sell' AND \"DateTime\" BETWEEN @from AND @to " +
-                    "GROUP BY Product_name ORDER BY Total DESC;",
+                    "GROUP BY Product_name, User_Name ORDER BY Total DESC;",
                     ("@from", from), ("@to", to));
             else
                 dt = Data.Query(
-                    "SELECT Product_name AS Product, SUM(quantity) AS Qty, SUM(price) AS Total " +
+                    "SELECT Product_name AS Product, User_Name AS Cashier, SUM(quantity) AS Qty, SUM(price) AS Total " +
                     "FROM product_process WHERE Process_type='sell' AND IdProduct=@pid AND \"DateTime\" BETWEEN @from AND @to " +
-                    "GROUP BY Product_name;",
+                    "GROUP BY Product_name, User_Name;",
                     ("@pid", productId), ("@from", from), ("@to", to));
             Grid.ItemsSource = dt.DefaultView;
             Summary.Text = "Total sales: " + Sum(dt, "Total").ToString("0.00");
@@ -112,9 +112,9 @@ namespace CornerPos
         private void RunDetails(string from, string to)
         {
             var dt = Data.Query(
-                "SELECT Product_name AS Product, SUM(quantity) AS Qty, SUM(price) AS Total " +
+                "SELECT Product_name AS Product, User_Name AS Cashier, SUM(quantity) AS Qty, SUM(price) AS Total " +
                 "FROM product_process WHERE Process_type='sell' AND \"DateTime\" BETWEEN @from AND @to " +
-                "GROUP BY Product_name ORDER BY Total DESC;",
+                "GROUP BY Product_name, User_Name ORDER BY Total DESC;",
                 ("@from", from), ("@to", to));
             Grid.ItemsSource = dt.DefaultView;
 

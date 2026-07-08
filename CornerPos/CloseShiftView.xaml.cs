@@ -14,29 +14,31 @@ namespace CornerPos
     public partial class CloseShiftView : UserControl
     {
         private readonly int _shift;
+        private readonly int _userId;
         private decimal _totalSell;
         private decimal _totalBuy;
 
-        public CloseShiftView(int shift)
+        public CloseShiftView(int shift, int userId)
         {
             InitializeComponent();
             _shift = shift;
+            _userId = userId;
             Refresh();
         }
 
         private void Refresh()
         {
-            // Sales
+            // Sales — only this cashier's own rows for the current shift
             var sells = Data.Query(
-                "SELECT proName, price, quantity, Dtime FROM close_shift WHERE processT='sell' AND ShiftNumber=@s;",
-                ("@s", _shift));
+                "SELECT proName, price, quantity, Dtime FROM close_shift WHERE processT='sell' AND ShiftNumber=@s AND Userid=@u;",
+                ("@s", _shift), ("@u", _userId));
             SellsGrid.ItemsSource = sells.DefaultView;
             _totalSell = SumPrice(sells);
 
             // Purchases
             var buys = Data.Query(
-                "SELECT proName, price, quantity, Dtime FROM close_shift WHERE processT='buy' AND ShiftNumber=@s;",
-                ("@s", _shift));
+                "SELECT proName, price, quantity, Dtime FROM close_shift WHERE processT='buy' AND ShiftNumber=@s AND Userid=@u;",
+                ("@s", _shift), ("@u", _userId));
             BuysGrid.ItemsSource = buys.DefaultView;
             _totalBuy = SumPrice(buys);
 
@@ -63,7 +65,8 @@ namespace CornerPos
                 Data.Execute(
                     "INSERT INTO shift_details (ShiftNum, TotalSell, TotalBuy, ProfitShift) VALUES (@sh,@ts,@tb,@p);",
                     ("@sh", _shift), ("@ts", _totalSell), ("@tb", _totalBuy), ("@p", net));
-                Data.Execute("DELETE FROM close_shift;");
+                Data.Execute("DELETE FROM close_shift WHERE Userid=@u AND ShiftNumber=@s;",
+                    ("@u", _userId), ("@s", _shift));
 
                 CloseBtn.IsEnabled = false;
                 MessageBox.Show("Shift closed", "Corner", MessageBoxButton.OK, MessageBoxImage.Information);

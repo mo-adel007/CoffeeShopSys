@@ -1,0 +1,46 @@
+<UserControl x:Class="CornerPos.DailyMovementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             FontFamily="{StaticResource AppFont}">
+    <Grid Margin="28">
+        <Border Width="480" HorizontalAlignment="Left" VerticalAlignment="Top"
+                Background="{StaticResource CardBrush}" CornerRadius="16"
+                BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+            <StackPanel Margin="24">
+                <TextBlock Text="Record a movement" FontSize="18" FontWeight="Bold"
+                           Foreground="{StaticResource EspressoBrush}" Margin="0,0,0,4"/>
+                <TextBlock Text="Deposits, withdrawals, purchases and other expenses."
+                           FontSize="12.5" Foreground="{StaticResource MutedBrush}" Margin="0,0,0,18"/>
+
+                <TextBlock Text="OPERATION" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource MutedBrush}" Margin="2,0,0,6"/>
+                <ComboBox x:Name="OpBox" Height="40" FontSize="14" SelectionChanged="Op_Changed">
+                    <ComboBoxItem Content="Deposit"/>
+                    <ComboBoxItem Content="Withdrawal"/>
+                    <ComboBoxItem Content="Buy goods"/>
+                    <ComboBoxItem Content="Other expense"/>
+                </ComboBox>
+
+                <TextBlock Text="AMOUNT" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource MutedBrush}" Margin="2,14,0,6"/>
+                <TextBox x:Name="AmountBox" Style="{StaticResource ModernTextBox}"/>
+
+                <TextBlock x:Name="NameLabel" Text="NAME" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource MutedBrush}" Margin="2,14,0,6"/>
+                <TextBox x:Name="NameBox" Style="{StaticResource ModernTextBox}"/>
+
+                <StackPanel x:Name="ReasonPanel">
+                    <TextBlock Text="REASON" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource MutedBrush}" Margin="2,14,0,6"/>
+                    <TextBox x:Name="ReasonBox" Style="{StaticResource ModernTextBox}"/>
+                </StackPanel>
+
+                <StackPanel x:Name="QtyPanel">
+                    <TextBlock Text="QUANTITY" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource MutedBrush}" Margin="2,14,0,6"/>
+                    <TextBox x:Name="QtyBox" Style="{StaticResource ModernTextBox}"/>
+                </StackPanel>
+
+                <TextBlock x:Name="Error" Foreground="{StaticResource DangerBrush}" FontSize="12.5"
+                           TextWrapping="Wrap" Margin="2,12,0,0" MinHeight="16"/>
+
+                <Button Content="Add movement" Style="{StaticResource PrimaryButton}" Margin="0,10,0,0" Click="Add_Click"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

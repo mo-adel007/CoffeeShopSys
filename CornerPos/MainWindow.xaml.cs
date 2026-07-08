@@ -103,6 +103,24 @@ namespace CornerPos
                 case "Expenses":
                     PageHost.Content = new MonthlyExpensesView();
                     break;
+                case "Daily Movement":
+                    PageHost.Content = new DailyMovementView(_userId, _userName, _shift);
+                    break;
+                case "Close Shift":
+                    PageHost.Content = new CloseShiftView(_shift);
+                    break;
+                case "Close Day":
+                    PageHost.Content = new CloseDayView();
+                    break;
+                case "Stock":
+                    PageHost.Content = new StockView();
+                    break;
+                case "Close Month":
+                    PageHost.Content = new CloseMonthView();
+                    break;
+                case "Sales & Reports":
+                    PageHost.Content = new ReportsView();
+                    break;
                 default:
                     PageHost.Content = Placeholder(title);
                     break;

@@ -1,0 +1,41 @@
+<UserControl x:Class="CornerPos.StockView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             FontFamily="{StaticResource AppFont}">
+    <Grid Margin="28">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="320"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Grid of products / current stock -->
+        <DataGrid x:Name="Grid" Grid.Column="0" Margin="0,0,20,0"
+                  Style="{StaticResource ModernDataGrid}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Product" Binding="{Binding Product_name}" Width="3*"/>
+                <DataGridTextColumn Header="Stock" Binding="{Binding Store}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Restock form -->
+        <Border Grid.Column="1" Background="{StaticResource CardBrush}" CornerRadius="16"
+                BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+            <StackPanel Margin="20">
+                <TextBlock Text="Add stock" FontSize="18" FontWeight="Bold"
+                           Foreground="{StaticResource EspressoBrush}" Margin="0,0,0,16"/>
+
+                <TextBlock Text="PRODUCT" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource MutedBrush}" Margin="2,0,0,6"/>
+                <ComboBox x:Name="ProductBox" Height="40" FontSize="14"/>
+
+                <TextBlock Text="AMOUNT" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource MutedBrush}" Margin="2,14,0,6"/>
+                <TextBox x:Name="AmountBox" Style="{StaticResource ModernTextBox}"/>
+
+                <TextBlock x:Name="Error" Foreground="{StaticResource DangerBrush}" FontSize="12.5"
+                           TextWrapping="Wrap" Margin="2,12,0,0" MinHeight="16"/>
+
+                <Button x:Name="AddBtn" Content="Add to stock" Style="{StaticResource PrimaryButton}"
+                        Margin="0,10,0,0" Click="Add_Click"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

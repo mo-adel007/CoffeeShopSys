@@ -79,9 +79,12 @@ namespace CornerPos
                 string name = Convert.ToString(row["username"]);
                 string role = Convert.ToString(row["time_work"]);
 
-                // Shift 1 for now; real shift assignment/close is ported with the
-                // close-shift screen. Sales are still tagged with this shift number.
-                var main = new MainWindow(userId, name, role, 1);
+                // Cashiers get a real shift number (reused or opened) per the legacy
+                // user_shift logic; admins use 0.
+                int shift = string.Equals(role, "admin", StringComparison.OrdinalIgnoreCase)
+                    ? 0 : Shift.AssignForCashier(name);
+
+                var main = new MainWindow(userId, name, role, shift);
                 main.Show();
                 Close();
             }

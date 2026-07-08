@@ -52,8 +52,8 @@ namespace CornerPos
             StockBox.Text = row["Store"] == DBNull.Value ? "" : Convert.ToString(row["Store"]);
             CategoryBox.SelectedValue = row["ProductType_id"] == DBNull.Value ? null : (object)Convert.ToInt32(row["ProductType_id"]);
 
-            FormTitle.Text = "Edit product";
-            SaveBtn.Content = "Save changes";
+            FormTitle.Text = "تعديل منتج";
+            SaveBtn.Content = "حفظ التعديلات";
             DeleteBtn.IsEnabled = true;
             Error.Text = "";
         }
@@ -62,17 +62,17 @@ namespace CornerPos
         {
             Error.Text = "";
             string name = (NameBox.Text ?? "").Trim();
-            if (name.Length == 0) { Error.Text = "Name is required."; return; }
+            if (name.Length == 0) { Error.Text = "الاسم مطلوب."; return; }
 
             decimal price = 0m;
             if (!string.IsNullOrWhiteSpace(PriceBox.Text) && !decimal.TryParse(PriceBox.Text.Trim(), out price))
-            { Error.Text = "Price must be a number."; return; }
+            { Error.Text = "السعر يجب أن يكون رقماً."; return; }
 
             int stock = 0;
             if (!string.IsNullOrWhiteSpace(StockBox.Text) && !int.TryParse(StockBox.Text.Trim(), out stock))
-            { Error.Text = "Stock must be a whole number."; return; }
+            { Error.Text = "المخزون يجب أن يكون رقماً صحيحاً."; return; }
 
-            if (CategoryBox.SelectedValue == null) { Error.Text = "Pick a category."; return; }
+            if (CategoryBox.SelectedValue == null) { Error.Text = "اختر صنفاً."; return; }
             int typeId = Convert.ToInt32(CategoryBox.SelectedValue);
 
             try
@@ -82,7 +82,7 @@ namespace CornerPos
                     // Guard against duplicate product names.
                     long dup = Convert.ToInt64(Data.Scalar(
                         "SELECT COUNT(*) FROM product WHERE Product_name = @n;", ("@n", name)));
-                    if (dup > 0) { Error.Text = "A product with that name already exists."; return; }
+                    if (dup > 0) { Error.Text = "يوجد منتج بنفس الاسم."; return; }
 
                     Data.Execute(
                         "INSERT INTO product (Product_name, Price, ProductType_id, Store, MakeAButton) " +
@@ -105,7 +105,7 @@ namespace CornerPos
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
             if (_selectedId == 0) return;
-            if (MessageBox.Show("Delete this product?", "Corner",
+            if (MessageBox.Show("حذف هذا المنتج؟", "Corner",
                     MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) return;
             try
             {
@@ -126,8 +126,8 @@ namespace CornerPos
             PriceBox.Text = "";
             StockBox.Text = "";
             CategoryBox.SelectedIndex = -1;
-            FormTitle.Text = "Add product";
-            SaveBtn.Content = "Add product";
+            FormTitle.Text = "إضافة منتج";
+            SaveBtn.Content = "إضافة منتج";
             DeleteBtn.IsEnabled = false;
             Error.Text = "";
         }

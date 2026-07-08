@@ -23,7 +23,7 @@ namespace CornerPos
             ToDate.SelectedDate = DateTime.Today;
         }
 
-        private string Mode => (TypeBox.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "";
+        private string Mode => (TypeBox.SelectedItem as ComboBoxItem)?.Tag?.ToString() ?? "";
 
         private void Type_Changed(object sender, SelectionChangedEventArgs e)
         {
@@ -31,12 +31,12 @@ namespace CornerPos
             {
                 case "By product type":
                     NamePanel.Visibility = Visibility.Visible;
-                    NameLbl.Text = "CATEGORY";
+                    NameLbl.Text = "الصنف";
                     NameBox.ItemsSource = LoadNames("SELECT type_id AS Id, type_name AS Name FROM product_type ORDER BY type_name;", false);
                     break;
                 case "By product":
                     NamePanel.Visibility = Visibility.Visible;
-                    NameLbl.Text = "PRODUCT";
+                    NameLbl.Text = "المنتج";
                     NameBox.ItemsSource = LoadNames("SELECT Product_id AS Id, Product_name AS Name FROM product ORDER BY Product_name;", true);
                     break;
                 default: // Details / Monthly expenses — no name picker
@@ -49,7 +49,7 @@ namespace CornerPos
         private List<Item> LoadNames(string sql, bool withAll)
         {
             var list = new List<Item>();
-            if (withAll) list.Add(new Item { Id = 0, Name = "All products" });
+            if (withAll) list.Add(new Item { Id = 0, Name = "كل المنتجات" });
             foreach (DataRow r in Data.Query(sql).Rows)
                 list.Add(new Item { Id = Convert.ToInt32(r["Id"]), Name = Convert.ToString(r["Name"]) });
             return list;
@@ -58,7 +58,7 @@ namespace CornerPos
         private void Run_Click(object sender, RoutedEventArgs e)
         {
             if (FromDate.SelectedDate == null || ToDate.SelectedDate == null)
-            { Summary.Text = "Pick a date range."; return; }
+            { Summary.Text = "اختر نطاق التاريخ."; return; }
 
             string from = FromDate.SelectedDate.Value.ToString("yyyy-MM-ddT00:00:00");
             string to = ToDate.SelectedDate.Value.ToString("yyyy-MM-ddT23:59:59");
@@ -86,7 +86,7 @@ namespace CornerPos
                 "GROUP BY pp.Product_name, pp.User_Name ORDER BY Total DESC;",
                 ("@t", typeId), ("@from", from), ("@to", to));
             Grid.ItemsSource = dt.DefaultView;
-            Summary.Text = "Total sales: " + Sum(dt, "Total").ToString("0.00");
+            Summary.Text = "إجمالي المبيعات: " + Sum(dt, "Total").ToString("0.00");
         }
 
         private void RunByProduct(string from, string to)
@@ -106,7 +106,7 @@ namespace CornerPos
                     "GROUP BY Product_name, User_Name;",
                     ("@pid", productId), ("@from", from), ("@to", to));
             Grid.ItemsSource = dt.DefaultView;
-            Summary.Text = "Total sales: " + Sum(dt, "Total").ToString("0.00");
+            Summary.Text = "إجمالي المبيعات: " + Sum(dt, "Total").ToString("0.00");
         }
 
         private void RunDetails(string from, string to)
@@ -124,7 +124,7 @@ namespace CornerPos
                 "SELECT SUM(price) FROM safe WHERE Type<>'Deposit' AND Dtime BETWEEN @from AND @to;", from, to);
             decimal sales = Sum(dt, "Total");
             Summary.Text = string.Format(
-                "Sales: {0:0.00}    Deposits: {1:0.00}    Withdrawals/expenses: {2:0.00}    Net (deposits − withdrawals): {3:0.00}",
+                "المبيعات: {0:0.00}    الإيداعات: {1:0.00}    المسحوبات/المصروفات: {2:0.00}    الصافي: {3:0.00}",
                 sales, deposit, withdraw, deposit - withdraw);
         }
 
@@ -135,7 +135,7 @@ namespace CornerPos
                 "WHERE Date_time BETWEEN @from AND @to ORDER BY Date_time;",
                 ("@from", from), ("@to", to));
             Grid.ItemsSource = dt.DefaultView;
-            Summary.Text = "Total monthly expenses: " + Sum(dt, "Price").ToString("0.00");
+            Summary.Text = "إجمالي المصروفات الشهرية: " + Sum(dt, "Price").ToString("0.00");
         }
 
         private decimal ScalarSum(string sql, string from, string to)
@@ -150,6 +150,19 @@ namespace CornerPos
             foreach (DataRow r in dt.Rows)
                 if (r[col] != DBNull.Value) s += Convert.ToDecimal(r[col]);
             return s;
+        }
+
+        private void Grid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "Product": e.Column.Header = "المنتج"; break;
+                case "Cashier": e.Column.Header = "الكاشير"; break;
+                case "Qty": e.Column.Header = "الكمية"; break;
+                case "Total": e.Column.Header = "الإجمالي"; break;
+                case "Expense": e.Column.Header = "المصروف"; break;
+                case "Price": e.Column.Header = "السعر"; break;
+            }
         }
 
         private class Item { public int Id { get; set; } public string Name { get; set; } }

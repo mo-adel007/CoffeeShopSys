@@ -33,7 +33,7 @@ namespace CornerPos
             _shift = shift;
             _loginTime = loginTime;
 
-            ShiftUser.Text = string.IsNullOrEmpty(_userName) ? "Cashier" : _userName;
+            ShiftUser.Text = string.IsNullOrEmpty(_userName) ? "كاشير" : _userName;
             CartList.ItemsSource = _cart;
             _cart.CollectionChanged += (s, e) => Refresh();
 
@@ -46,7 +46,7 @@ namespace CornerPos
         // ---------- data loading ----------
         private void LoadCategories()
         {
-            var cats = new List<Category> { new Category { Id = 0, Name = "All" } };
+            var cats = new List<Category> { new Category { Id = 0, Name = "الكل" } };
             try
             {
                 using (var conn = new SQLiteConnection(Db.ConnectionString()))
@@ -133,7 +133,7 @@ namespace CornerPos
         {
             if (_cart.Count == 0)
             {
-                MessageBox.Show("The order is empty.", "Corner", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("الطلب فارغ.", "Corner", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
@@ -180,7 +180,7 @@ namespace CornerPos
                     }
                 }
 
-                MessageBox.Show("Order charged: " + Total().ToString("0.00"), "Corner",
+                MessageBox.Show("تم تحصيل الطلب: " + Total().ToString("0.00"), "Corner",
                     MessageBoxButton.OK, MessageBoxImage.Information);
                 _cart.Clear();
                 CashBox.Text = "";
@@ -228,7 +228,7 @@ namespace CornerPos
                 "SELECT COALESCE(SUM(quantity),0) FROM product_process WHERE UserId=@u AND Process_type='sell' AND \"DateTime\">=@t;",
                 ("@u", _userId), ("@t", cut))));
             ShiftAmount.Text = amt.ToString("0.00");
-            ShiftCount.Text = cnt + " items";
+            ShiftCount.Text = cnt + " عنصر";
         }
 
         private void Cash_Changed(object sender, TextChangedEventArgs e) => UpdateChange();

@@ -41,10 +41,10 @@ namespace CornerPos
             Error.Text = "";
 
             string productName = ProductBox.SelectedItem as string;
-            if (string.IsNullOrWhiteSpace(productName)) { Error.Text = "Pick a product."; return; }
+            if (string.IsNullOrWhiteSpace(productName)) { Error.Text = "اختر منتجاً."; return; }
 
             if (!int.TryParse((AmountBox.Text ?? "").Trim(), out int amt) || amt <= 0)
-            { Error.Text = "Amount must be a positive whole number."; return; }
+            { Error.Text = "المبلغ يجب أن يكون رقماً صحيحاً موجباً."; return; }
 
             try
             {
@@ -54,7 +54,7 @@ namespace CornerPos
 
                 LoadGrid();
                 AmountBox.Text = "";
-                MessageBox.Show("Stock updated.", "Corner", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("تم تحديث المخزون.", "Corner", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex) { Error.Text = ex.Message; }
         }

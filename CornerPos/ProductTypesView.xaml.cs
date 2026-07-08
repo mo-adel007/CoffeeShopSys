@@ -36,8 +36,8 @@ namespace CornerPos
             _selectedId = Convert.ToInt32(row["type_id"]);
             NameBox.Text = Convert.ToString(row["type_name"]);
 
-            FormTitle.Text = "Edit category";
-            SaveBtn.Content = "Save changes";
+            FormTitle.Text = "تعديل صنف";
+            SaveBtn.Content = "حفظ التعديلات";
             DeleteBtn.IsEnabled = true;
             Error.Text = "";
         }
@@ -46,7 +46,7 @@ namespace CornerPos
         {
             Error.Text = "";
             string name = (NameBox.Text ?? "").Trim();
-            if (name.Length == 0) { Error.Text = "Name is required."; return; }
+            if (name.Length == 0) { Error.Text = "الاسم مطلوب."; return; }
 
             try
             {
@@ -55,7 +55,7 @@ namespace CornerPos
                     // Guard against duplicate category names.
                     long dup = Convert.ToInt64(Data.Scalar(
                         "SELECT COUNT(*) FROM product_type WHERE type_name = @n;", ("@n", name)));
-                    if (dup > 0) { Error.Text = "A category with that name already exists."; return; }
+                    if (dup > 0) { Error.Text = "يوجد صنف بنفس الاسم."; return; }
 
                     Data.Execute(
                         "INSERT INTO product_type (type_name) VALUES (@n);", ("@n", name));
@@ -66,7 +66,7 @@ namespace CornerPos
                     long dup = Convert.ToInt64(Data.Scalar(
                         "SELECT COUNT(*) FROM product_type WHERE type_name = @n AND type_id <> @id;",
                         ("@n", name), ("@id", _selectedId)));
-                    if (dup > 0) { Error.Text = "A category with that name already exists."; return; }
+                    if (dup > 0) { Error.Text = "يوجد صنف بنفس الاسم."; return; }
 
                     Data.Execute(
                         "UPDATE product_type SET type_name=@n WHERE type_id=@id;",
@@ -82,7 +82,7 @@ namespace CornerPos
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
             if (_selectedId == 0) return;
-            if (MessageBox.Show("Delete this category?", "Corner",
+            if (MessageBox.Show("حذف هذا الصنف؟", "Corner",
                     MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) return;
             try
             {
@@ -100,8 +100,8 @@ namespace CornerPos
             _selectedId = 0;
             Grid.SelectedItem = null;
             NameBox.Text = "";
-            FormTitle.Text = "Add category";
-            SaveBtn.Content = "Add category";
+            FormTitle.Text = "إضافة صنف";
+            SaveBtn.Content = "إضافة صنف";
             DeleteBtn.IsEnabled = false;
             Error.Text = "";
         }

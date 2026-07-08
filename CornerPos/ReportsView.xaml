@@ -14,28 +14,28 @@
                 BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Padding="16,12" Margin="0,0,0,14">
             <WrapPanel>
                 <StackPanel Margin="0,0,16,0">
-                    <TextBlock Text="REPORT" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource MutedBrush}" Margin="0,0,0,4"/>
-                    <ComboBox x:Name="TypeBox" Width="170" Height="38" FontSize="14" SelectionChanged="Type_Changed">
-                        <ComboBoxItem Content="By product type"/>
-                        <ComboBoxItem Content="By product"/>
-                        <ComboBoxItem Content="Details (sales + safe)"/>
-                        <ComboBoxItem Content="Monthly expenses"/>
+                    <TextBlock Text="التقرير" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource MutedBrush}" Margin="0,0,0,4"/>
+                    <ComboBox x:Name="TypeBox" Width="190" Height="38" FontSize="14" SelectionChanged="Type_Changed">
+                        <ComboBoxItem Tag="By product type" Content="حسب الصنف"/>
+                        <ComboBoxItem Tag="By product" Content="حسب المنتج"/>
+                        <ComboBoxItem Tag="Details (sales + safe)" Content="تفاصيل (مبيعات + خزنة)"/>
+                        <ComboBoxItem Tag="Monthly expenses" Content="المصروفات الشهرية"/>
                     </ComboBox>
                 </StackPanel>
                 <StackPanel x:Name="NamePanel" Margin="0,0,16,0">
-                    <TextBlock x:Name="NameLbl" Text="NAME" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource MutedBrush}" Margin="0,0,0,4"/>
+                    <TextBlock x:Name="NameLbl" Text="الاسم" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource MutedBrush}" Margin="0,0,0,4"/>
                     <ComboBox x:Name="NameBox" Width="190" Height="38" FontSize="14" DisplayMemberPath="Name" SelectedValuePath="Id"/>
                 </StackPanel>
                 <StackPanel Margin="0,0,16,0">
-                    <TextBlock Text="FROM" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource MutedBrush}" Margin="0,0,0,4"/>
+                    <TextBlock Text="من" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource MutedBrush}" Margin="0,0,0,4"/>
                     <DatePicker x:Name="FromDate" Width="140" Height="38"/>
                 </StackPanel>
                 <StackPanel Margin="0,0,16,0">
-                    <TextBlock Text="TO" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource MutedBrush}" Margin="0,0,0,4"/>
+                    <TextBlock Text="إلى" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource MutedBrush}" Margin="0,0,0,4"/>
                     <DatePicker x:Name="ToDate" Width="140" Height="38"/>
                 </StackPanel>
                 <StackPanel VerticalAlignment="Bottom">
-                    <Button Content="Run report" Width="130" Style="{StaticResource PrimaryButton}" Click="Run_Click"/>
+                    <Button Content="عرض التقرير" Width="130" Style="{StaticResource PrimaryButton}" Click="Run_Click"/>
                 </StackPanel>
             </WrapPanel>
         </Border>
@@ -45,6 +45,7 @@
                    Foreground="{StaticResource EspressoBrush}" Margin="4,0,0,12" TextWrapping="Wrap"/>
 
         <!-- Results -->
-        <DataGrid x:Name="Grid" Grid.Row="2" Style="{StaticResource ModernDataGrid}" AutoGenerateColumns="True"/>
+        <DataGrid x:Name="Grid" Grid.Row="2" Style="{StaticResource ModernDataGrid}" AutoGenerateColumns="True"
+                  AutoGeneratingColumn="Grid_AutoGeneratingColumn"/>
     </Grid>
 </UserControl>

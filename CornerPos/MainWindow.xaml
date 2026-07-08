@@ -1,10 +1,11 @@
 <Window x:Class="CornerPos.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Corner — Point of Sale" Width="1120" Height="720"
+        Title="Corner — نقطة البيع" Width="1120" Height="720"
         MinWidth="920" MinHeight="600"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource CreamBrush}"
+        FlowDirection="RightToLeft"
         FontFamily="{StaticResource AppFont}">
 
     <Grid>
@@ -34,30 +35,30 @@
                     <!-- Cashier-mode pages (till + shift lifecycle) -->
                     <StackPanel x:Name="CashierNav">
                         <Button Style="{StaticResource SidebarButton}" Tag="Cashier"
-                                Content="&#x1F4B3;   Cashier" Click="Nav_Click"/>
+                                Content="&#x1F4B3;   الكاشير" Click="Nav_Click"/>
                         <Button Style="{StaticResource SidebarButton}" Tag="Daily Movement"
-                                Content="&#x1F501;   Daily Movement" Click="Nav_Click"/>
+                                Content="&#x1F501;   الحركة اليومية" Click="Nav_Click"/>
                         <Button Style="{StaticResource SidebarButton}" Tag="Close Shift"
-                                Content="&#x1F9FE;   Close Shift" Click="Nav_Click"/>
+                                Content="&#x1F9FE;   تقفيل الوردية" Click="Nav_Click"/>
                         <Button Style="{StaticResource SidebarButton}" Tag="Close Day"
-                                Content="&#x1F4C5;   Close Day" Click="Nav_Click"/>
+                                Content="&#x1F4C5;   تقفيل اليوم" Click="Nav_Click"/>
                         <Button Style="{StaticResource SidebarButton}" Tag="Stock"
-                                Content="&#x1F4E6;   Stock" Click="Nav_Click"/>
+                                Content="&#x1F4E6;   المخزن" Click="Nav_Click"/>
                     </StackPanel>
                     <!-- Admin-mode pages (back-office) -->
                     <StackPanel x:Name="AdminNav" Visibility="Collapsed">
                         <Button Style="{StaticResource SidebarButton}" Tag="Products"
-                                Content="&#x2615;   Products" Click="Nav_Click"/>
+                                Content="&#x2615;   المنتجات" Click="Nav_Click"/>
                         <Button Style="{StaticResource SidebarButton}" Tag="Product Types"
-                                Content="&#x1F3F7;   Product Types" Click="Nav_Click"/>
+                                Content="&#x1F3F7;   الأصناف" Click="Nav_Click"/>
                         <Button Style="{StaticResource SidebarButton}" Tag="Users"
-                                Content="&#x1F465;   Users" Click="Nav_Click"/>
+                                Content="&#x1F465;   المستخدمون" Click="Nav_Click"/>
                         <Button Style="{StaticResource SidebarButton}" Tag="Expenses"
-                                Content="&#x1F4B0;   Monthly Expenses" Click="Nav_Click"/>
+                                Content="&#x1F4B0;   المصروفات الشهرية" Click="Nav_Click"/>
                         <Button Style="{StaticResource SidebarButton}" Tag="Sales &amp; Reports"
-                                Content="&#x1F4C8;   Sales &amp; Reports" Click="Nav_Click"/>
+                                Content="&#x1F4C8;   التقارير" Click="Nav_Click"/>
                         <Button Style="{StaticResource SidebarButton}" Tag="Close Month"
-                                Content="&#x1F5D3;   Close Month" Click="Nav_Click"/>
+                                Content="&#x1F5D3;   تقفيل الشهر" Click="Nav_Click"/>
                     </StackPanel>
                 </StackPanel>
 
@@ -65,13 +66,13 @@
                 <StackPanel Grid.Row="2" Margin="16,0,16,18">
                     <Border Background="#33000000" CornerRadius="12" Padding="14,12">
                         <StackPanel>
-                            <TextBlock x:Name="UserName" Text="User" Foreground="White"
+                            <TextBlock x:Name="UserName" Text="مستخدم" Foreground="White"
                                        FontWeight="SemiBold" FontSize="14"/>
-                            <TextBlock x:Name="UserRole" Text="Role" Foreground="{StaticResource CaramelBrush}"
+                            <TextBlock x:Name="UserRole" Text="" Foreground="{StaticResource CaramelBrush}"
                                        FontSize="12" Margin="0,2,0,0"/>
                         </StackPanel>
                     </Border>
-                    <Button Content="Log out" Style="{StaticResource SidebarButton}" Margin="0,8,0,0"
+                    <Button Content="تسجيل الخروج" Style="{StaticResource SidebarButton}" Margin="0,8,0,0"
                             Click="Logout_Click"/>
                 </StackPanel>
             </Grid>
@@ -89,9 +90,9 @@
                     BorderThickness="0,0,0,1">
                 <Grid Margin="28,0">
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Left">
-                        <TextBlock x:Name="PageTitle" Text="Cashier" FontSize="20" FontWeight="Bold"
+                        <TextBlock x:Name="PageTitle" Text="الكاشير" FontSize="20" FontWeight="Bold"
                                    Foreground="{StaticResource EspressoBrush}"/>
-                        <TextBlock x:Name="PageSubtitle" Text="Take orders and manage the current shift"
+                        <TextBlock x:Name="PageSubtitle" Text=""
                                    FontSize="12.5" Foreground="{StaticResource MutedBrush}" Margin="0,2,0,0"/>
                     </StackPanel>
                     <Button x:Name="ModeToggle" HorizontalAlignment="Right" VerticalAlignment="Center"

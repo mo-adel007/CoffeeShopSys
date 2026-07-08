@@ -12,7 +12,7 @@
         <DataGrid x:Name="Grid" Grid.Column="0" Margin="0,0,20,0"
                   Style="{StaticResource ModernDataGrid}" SelectionChanged="Grid_SelectionChanged">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Category" Binding="{Binding type_name}" Width="*"/>
+                <DataGridTextColumn Header="الصنف" Binding="{Binding type_name}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
 
@@ -20,16 +20,16 @@
         <Border Grid.Column="1" Background="{StaticResource CardBrush}" CornerRadius="16"
                 BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
             <StackPanel Margin="20">
-                <TextBlock x:Name="FormTitle" Text="Add category" FontSize="18" FontWeight="Bold"
+                <TextBlock x:Name="FormTitle" Text="إضافة صنف" FontSize="18" FontWeight="Bold"
                            Foreground="{StaticResource EspressoBrush}" Margin="0,0,0,16"/>
 
-                <TextBlock Text="NAME" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource MutedBrush}" Margin="2,0,0,6"/>
+                <TextBlock Text="الاسم" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource MutedBrush}" Margin="2,0,0,6"/>
                 <TextBox x:Name="NameBox" Style="{StaticResource ModernTextBox}"/>
 
                 <TextBlock x:Name="Error" Foreground="{StaticResource DangerBrush}" FontSize="12.5"
                            TextWrapping="Wrap" Margin="2,12,0,0" MinHeight="16"/>
 
-                <Button x:Name="SaveBtn" Content="Add category" Style="{StaticResource PrimaryButton}"
+                <Button x:Name="SaveBtn" Content="إضافة صنف" Style="{StaticResource PrimaryButton}"
                         Margin="0,10,0,0" Click="Save_Click"/>
                 <Grid Margin="0,8,0,0">
                     <Grid.ColumnDefinitions>
@@ -37,8 +37,8 @@
                         <ColumnDefinition Width="8"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="NewBtn" Grid.Column="0" Content="New" Style="{StaticResource GhostButton}" Click="New_Click"/>
-                    <Button x:Name="DeleteBtn" Grid.Column="2" Content="Delete" Style="{StaticResource DangerButton}"
+                    <Button x:Name="NewBtn" Grid.Column="0" Content="جديد" Style="{StaticResource GhostButton}" Click="New_Click"/>
+                    <Button x:Name="DeleteBtn" Grid.Column="2" Content="حذف" Style="{StaticResource DangerButton}"
                             Click="Delete_Click" IsEnabled="False"/>
                 </Grid>
             </StackPanel>

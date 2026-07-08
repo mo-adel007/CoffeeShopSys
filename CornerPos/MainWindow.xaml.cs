@@ -31,9 +31,9 @@ namespace CornerPos
             _shift = shift;
             _loginTime = loginTime;
 
-            UserName.Text = string.IsNullOrEmpty(_userName) ? "User" : _userName;
+            UserName.Text = string.IsNullOrEmpty(_userName) ? "مستخدم" : _userName;
             bool isAdmin = string.Equals(_role, "admin", StringComparison.OrdinalIgnoreCase);
-            UserRole.Text = isAdmin ? "Administrator" : "Cashier";
+            UserRole.Text = isAdmin ? "مدير" : "كاشير";
 
             // Admins land in Admin mode and can toggle to a focused Cashier view.
             // Cashiers only ever see the Cashier-mode pages (no toggle).
@@ -49,10 +49,10 @@ namespace CornerPos
             bool admin = mode == "admin";
             AdminNav.Visibility = admin ? Visibility.Visible : Visibility.Collapsed;
             CashierNav.Visibility = admin ? Visibility.Collapsed : Visibility.Visible;
-            ModeToggle.Content = admin ? "☕  Switch to Cashier" : "⚙  Switch to Admin";
+            ModeToggle.Content = admin ? "☕  التبديل إلى الكاشير" : "⚙  التبديل إلى الإدارة";
 
-            if (admin) GoTo("Products", "Manage the menu, prices and stock");
-            else GoTo("Cashier", "Take orders and manage the current shift");
+            if (admin) GoTo("Products", "المنتجات", "إدارة القائمة والأسعار والمخزون");
+            else GoTo("Cashier", "الكاشير", "استقبال الطلبات وإدارة الوردية الحالية");
         }
 
         private void ModeToggle_Click(object sender, RoutedEventArgs e)
@@ -64,30 +64,30 @@ namespace CornerPos
         {
             var btn = sender as Button;
             if (btn == null) return;
-            string page = Convert.ToString(btn.Tag);
-            switch (page)
+            string key = Convert.ToString(btn.Tag);
+            switch (key)
             {
-                case "Cashier":         GoTo(page, "Take orders and manage the current shift"); break;
-                case "Daily Movement":  GoTo(page, "Record safe deposits, withdrawals and expenses"); break;
-                case "Close Shift":     GoTo(page, "Review and close the current shift"); break;
-                case "Close Day":       GoTo(page, "Review and close the day"); break;
-                case "Stock":           GoTo(page, "Restock products"); break;
-                case "Products":        GoTo(page, "Manage the menu, prices and stock"); break;
-                case "Product Types":   GoTo(page, "Manage product categories"); break;
-                case "Sales & Reports": GoTo(page, "Daily, shift and monthly sales at a glance"); break;
-                case "Expenses":        GoTo(page, "Record and review monthly expenses"); break;
-                case "Users":           GoTo(page, "Manage staff logins and access"); break;
-                case "Close Month":     GoTo(page, "Review and close the month"); break;
-                default:                GoTo(page, ""); break;
+                case "Cashier":         GoTo(key, "الكاشير", "استقبال الطلبات وإدارة الوردية الحالية"); break;
+                case "Daily Movement":  GoTo(key, "الحركة اليومية", "تسجيل الإيداعات والمسحوبات والمصروفات"); break;
+                case "Close Shift":     GoTo(key, "تقفيل الوردية", "مراجعة وتقفيل الوردية الحالية"); break;
+                case "Close Day":       GoTo(key, "تقفيل اليوم", "مراجعة وتقفيل اليوم"); break;
+                case "Stock":           GoTo(key, "المخزن", "إعادة تعبئة المخزون"); break;
+                case "Products":        GoTo(key, "المنتجات", "إدارة القائمة والأسعار والمخزون"); break;
+                case "Product Types":   GoTo(key, "الأصناف", "إدارة أصناف المنتجات"); break;
+                case "Sales & Reports": GoTo(key, "التقارير", "المبيعات اليومية والشهرية"); break;
+                case "Expenses":        GoTo(key, "المصروفات الشهرية", "تسجيل ومراجعة المصروفات الشهرية"); break;
+                case "Users":           GoTo(key, "المستخدمون", "إدارة حسابات الموظفين"); break;
+                case "Close Month":     GoTo(key, "تقفيل الشهر", "مراجعة وتقفيل الشهر"); break;
+                default:                GoTo(key, key, ""); break;
             }
         }
 
-        private void GoTo(string title, string subtitle)
+        private void GoTo(string key, string title, string subtitle)
         {
             PageTitle.Text = title;
             PageSubtitle.Text = subtitle;
 
-            switch (title)
+            switch (key)
             {
                 case "Cashier":
                     if (_cashier == null) _cashier = new CashierView(_userId, _userName, _shift, _loginTime);
@@ -141,7 +141,7 @@ namespace CornerPos
             });
             stack.Children.Add(new TextBlock
             {
-                Text = title + " screen",
+                Text = title,
                 FontSize = 18,
                 FontWeight = FontWeights.SemiBold,
                 Margin = new Thickness(0, 14, 0, 0),
@@ -150,7 +150,7 @@ namespace CornerPos
             });
             stack.Children.Add(new TextBlock
             {
-                Text = "This screen is being rebuilt in the new interface.",
+                Text = "هذه الشاشة قيد الإنشاء.",
                 FontSize = 13,
                 Margin = new Thickness(0, 6, 0, 0),
                 HorizontalAlignment = HorizontalAlignment.Center,

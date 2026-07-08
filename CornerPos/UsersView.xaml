@@ -12,8 +12,8 @@
         <DataGrid x:Name="Grid" Grid.Column="0" Margin="0,0,20,0"
                   Style="{StaticResource ModernDataGrid}" SelectionChanged="Grid_SelectionChanged">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Username" Binding="{Binding username}" Width="2*"/>
-                <DataGridTextColumn Header="Role" Binding="{Binding time_work}" Width="*"/>
+                <DataGridTextColumn Header="اسم المستخدم" Binding="{Binding username}" Width="2*"/>
+                <DataGridTextColumn Header="الصلاحية" Binding="{Binding time_work}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
 
@@ -21,28 +21,28 @@
         <Border Grid.Column="1" Background="{StaticResource CardBrush}" CornerRadius="16"
                 BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
             <StackPanel Margin="20">
-                <TextBlock x:Name="FormTitle" Text="Add user" FontSize="18" FontWeight="Bold"
+                <TextBlock x:Name="FormTitle" Text="إضافة مستخدم" FontSize="18" FontWeight="Bold"
                            Foreground="{StaticResource EspressoBrush}" Margin="0,0,0,16"/>
 
-                <TextBlock Text="USERNAME" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource MutedBrush}" Margin="2,0,0,6"/>
+                <TextBlock Text="اسم المستخدم" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource MutedBrush}" Margin="2,0,0,6"/>
                 <TextBox x:Name="NameBox" Style="{StaticResource ModernTextBox}"/>
 
-                <TextBlock Text="PASSWORD" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource MutedBrush}" Margin="2,14,0,6"/>
+                <TextBlock Text="كلمة المرور" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource MutedBrush}" Margin="2,14,0,6"/>
                 <PasswordBox x:Name="PassBox" Style="{StaticResource ModernPasswordBox}"/>
-                <TextBlock x:Name="PassHint" Text="Leave blank to keep current password"
+                <TextBlock x:Name="PassHint" Text="اتركها فارغة للإبقاء على كلمة المرور الحالية"
                            FontSize="11" Foreground="{StaticResource MutedBrush}" Margin="2,4,0,0"
                            Visibility="Collapsed"/>
 
-                <TextBlock Text="ROLE" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource MutedBrush}" Margin="2,14,0,6"/>
+                <TextBlock Text="الصلاحية" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource MutedBrush}" Margin="2,14,0,6"/>
                 <ComboBox x:Name="RoleBox" Height="40" FontSize="14" SelectedValuePath="Tag">
-                    <ComboBoxItem Content="Administrator" Tag="admin"/>
-                    <ComboBoxItem Content="Cashier" Tag="user"/>
+                    <ComboBoxItem Content="مدير" Tag="admin"/>
+                    <ComboBoxItem Content="كاشير" Tag="user"/>
                 </ComboBox>
 
                 <TextBlock x:Name="Error" Foreground="{StaticResource DangerBrush}" FontSize="12.5"
                            TextWrapping="Wrap" Margin="2,12,0,0" MinHeight="16"/>
 
-                <Button x:Name="SaveBtn" Content="Add user" Style="{StaticResource PrimaryButton}"
+                <Button x:Name="SaveBtn" Content="إضافة مستخدم" Style="{StaticResource PrimaryButton}"
                         Margin="0,10,0,0" Click="Save_Click"/>
                 <Grid Margin="0,8,0,0">
                     <Grid.ColumnDefinitions>
@@ -50,8 +50,8 @@
                         <ColumnDefinition Width="8"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="NewBtn" Grid.Column="0" Content="New" Style="{StaticResource GhostButton}" Click="New_Click"/>
-                    <Button x:Name="DeleteBtn" Grid.Column="2" Content="Delete" Style="{StaticResource DangerButton}"
+                    <Button x:Name="NewBtn" Grid.Column="0" Content="جديد" Style="{StaticResource GhostButton}" Click="New_Click"/>
+                    <Button x:Name="DeleteBtn" Grid.Column="2" Content="حذف" Style="{StaticResource DangerButton}"
                             Click="Delete_Click" IsEnabled="False"/>
                 </Grid>
             </StackPanel>

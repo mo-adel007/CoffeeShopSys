@@ -46,11 +46,11 @@ namespace CornerPos
         {
             Error.Text = "";
             string name = (NameBox.Text ?? "").Trim();
-            if (name.Length == 0) { Error.Text = "Name is required."; return; }
+            if (name.Length == 0) { Error.Text = "الاسم مطلوب."; return; }
 
             decimal price;
             if (!decimal.TryParse((PriceBox.Text ?? "").Trim(), out price))
-            { Error.Text = "Price must be a number."; return; }
+            { Error.Text = "السعر يجب أن يكون رقماً."; return; }
 
             try
             {
@@ -78,7 +78,7 @@ namespace CornerPos
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
             if (_selectedId == 0) return;
-            if (MessageBox.Show("Delete this expense?", "Corner",
+            if (MessageBox.Show("حذف هذا المصروف؟", "Corner",
                     MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) return;
             try
             {

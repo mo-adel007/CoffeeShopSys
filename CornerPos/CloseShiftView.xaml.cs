@@ -69,7 +69,7 @@ namespace CornerPos
                     ("@u", _userId), ("@s", _shift));
 
                 CloseBtn.IsEnabled = false;
-                MessageBox.Show("Shift closed", "Corner", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("تم تقفيل الوردية", "Corner", MessageBoxButton.OK, MessageBoxImage.Information);
                 Refresh();
             }
             catch (Exception ex)

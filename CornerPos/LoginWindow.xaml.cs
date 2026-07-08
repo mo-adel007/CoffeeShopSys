@@ -45,7 +45,7 @@ namespace CornerPos
 
             if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(pass))
             {
-                Error.Text = "Please enter your username and password.";
+                Error.Text = "من فضلك أدخل اسم المستخدم وكلمة المرور.";
                 return;
             }
 
@@ -68,7 +68,7 @@ namespace CornerPos
                 string stored = row == null ? null : Convert.ToString(row["Pass"]);
                 if (row == null || !Security.Verify(pass, stored))
                 {
-                    Error.Text = "Incorrect username or password.";
+                    Error.Text = "اسم المستخدم أو كلمة المرور غير صحيحة.";
                     return;
                 }
 

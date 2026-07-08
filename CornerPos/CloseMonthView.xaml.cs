@@ -64,7 +64,7 @@ namespace CornerPos
                 Data.Execute("DELETE FROM monthly_expenses;");
 
                 CloseMonthBtn.IsEnabled = false;
-                MessageBox.Show("Month closed", "Corner", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("تم تقفيل الشهر", "Corner", MessageBoxButton.OK, MessageBoxImage.Information);
                 Refresh();
             }
             catch (Exception ex)

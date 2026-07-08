@@ -27,7 +27,7 @@ namespace CornerPos
             OpBox.SelectedIndex = 0;
         }
 
-        private string Op => (OpBox.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "";
+        private string Op => (OpBox.SelectedItem as ComboBoxItem)?.Tag?.ToString() ?? "";
 
         private void Op_Changed(object sender, SelectionChangedEventArgs e)
         {
@@ -35,19 +35,19 @@ namespace CornerPos
             switch (Op)
             {
                 case "Deposit":
-                    NameLabel.Text = "DEPOSITOR NAME";
+                    NameLabel.Text = "اسم المودع";
                     Show(ReasonPanel, true); Show(QtyPanel, false);
                     break;
                 case "Withdrawal":
-                    NameLabel.Text = "PERSON";
+                    NameLabel.Text = "اسم الساحب";
                     Show(ReasonPanel, true); Show(QtyPanel, false);
                     break;
                 case "Buy goods":
-                    NameLabel.Text = "ITEM NAME";
+                    NameLabel.Text = "اسم الصنف";
                     Show(ReasonPanel, false); Show(QtyPanel, true);
                     break;
                 default: // Other expense
-                    NameLabel.Text = "EXPENSE NAME";
+                    NameLabel.Text = "اسم المصروف";
                     Show(ReasonPanel, false); Show(QtyPanel, false);
                     break;
             }
@@ -60,11 +60,11 @@ namespace CornerPos
         {
             Error.Text = "";
             string op = Op;
-            if (string.IsNullOrEmpty(op)) { Error.Text = "Pick an operation."; return; }
+            if (string.IsNullOrEmpty(op)) { Error.Text = "اختر نوع العملية."; return; }
 
             decimal amount;
             if (!decimal.TryParse((AmountBox.Text ?? "").Trim(), out amount) || amount <= 0)
-            { Error.Text = "Enter a valid amount."; return; }
+            { Error.Text = "أدخل مبلغاً صحيحاً."; return; }
 
             string name = (NameBox.Text ?? "").Trim();
 
@@ -120,7 +120,7 @@ namespace CornerPos
                 Data.Batch(statements);
 
                 Error.Text = "";
-                MessageBox.Show("Movement recorded.", "Corner", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("تم تسجيل الحركة.", "Corner", MessageBoxButton.OK, MessageBoxImage.Information);
                 AmountBox.Text = ""; NameBox.Text = ""; ReasonBox.Text = ""; QtyBox.Text = "";
             }
             catch (Exception ex) { Error.Text = ex.Message; }

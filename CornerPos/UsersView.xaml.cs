@@ -51,8 +51,8 @@ namespace CornerPos
             PassBox.Password = "";
             PassHint.Visibility = Visibility.Visible;
 
-            FormTitle.Text = "Edit user";
-            SaveBtn.Content = "Save changes";
+            FormTitle.Text = "تعديل مستخدم";
+            SaveBtn.Content = "حفظ التعديلات";
             DeleteBtn.IsEnabled = true;
             Error.Text = "";
         }
@@ -61,7 +61,7 @@ namespace CornerPos
         {
             Error.Text = "";
             string name = (NameBox.Text ?? "").Trim();
-            if (name.Length == 0) { Error.Text = "Username is required."; return; }
+            if (name.Length == 0) { Error.Text = "اسم المستخدم مطلوب."; return; }
 
             // Role required; default to "user" if nothing is picked.
             string role = RoleBox.SelectedValue as string;
@@ -74,11 +74,11 @@ namespace CornerPos
                 if (_selectedId == 0)
                 {
                     // New user: password is required.
-                    if (password.Length == 0) { Error.Text = "Password is required."; return; }
+                    if (password.Length == 0) { Error.Text = "كلمة المرور مطلوبة."; return; }
 
                     long dup = Convert.ToInt64(Data.Scalar(
                         "SELECT COUNT(*) FROM login WHERE username=@u;", ("@u", name)));
-                    if (dup > 0) { Error.Text = "That username already exists."; return; }
+                    if (dup > 0) { Error.Text = "اسم المستخدم موجود بالفعل."; return; }
 
                     Data.Execute(
                         "INSERT INTO login (username, Pass, time_work) VALUES (@u, @p, @t);",
@@ -110,7 +110,7 @@ namespace CornerPos
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
             if (_selectedId == 0) return;
-            if (MessageBox.Show("Delete this user?", "Corner",
+            if (MessageBox.Show("حذف هذا المستخدم؟", "Corner",
                     MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) return;
             try
             {
@@ -131,8 +131,8 @@ namespace CornerPos
             PassBox.Password = "";
             PassHint.Visibility = Visibility.Collapsed;
             RoleBox.SelectedIndex = -1;
-            FormTitle.Text = "Add user";
-            SaveBtn.Content = "Add user";
+            FormTitle.Text = "إضافة مستخدم";
+            SaveBtn.Content = "إضافة مستخدم";
             DeleteBtn.IsEnabled = false;
             Error.Text = "";
         }

@@ -67,7 +67,7 @@ namespace CornerPos
                 Data.Execute("DELETE FROM user_shift;");
 
                 CloseDayBtn.IsEnabled = false;
-                MessageBox.Show("Day closed", "Corner", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("تم تقفيل اليوم", "Corner", MessageBoxButton.OK, MessageBoxImage.Information);
                 Refresh();
             }
             catch (Exception ex)

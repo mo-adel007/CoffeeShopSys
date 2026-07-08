@@ -48,7 +48,7 @@ namespace CornerPos
         {
             Message.Text = "";
             string error;
-            if (!LicenseManager.TryActivate(KeyBox.Text, out error))
+            if (!LicenseManager.TryActivate(KeyBox.Password, out error))
             {
                 Message.Text = error;
                 return;

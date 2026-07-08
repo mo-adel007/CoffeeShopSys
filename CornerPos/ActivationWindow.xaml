@@ -27,9 +27,8 @@
 
             <TextBlock Text="أدخل مفتاح الترخيص:" Margin="2,16,0,6"
                        FontSize="13.5" Foreground="{StaticResource MutedBrush}"/>
-            <TextBox x:Name="KeyBox" Style="{StaticResource ModernTextBox}"
-                     Height="80" AcceptsReturn="True" TextWrapping="Wrap"
-                     VerticalContentAlignment="Top" Padding="12,8"/>
+            <PasswordBox x:Name="KeyBox" Style="{StaticResource ModernPasswordBox}"
+                         PasswordChar="*"/>
 
             <TextBlock x:Name="Message" TextWrapping="Wrap" Margin="2,10,0,0"
                        FontSize="13" Foreground="{StaticResource DangerBrush}"/>

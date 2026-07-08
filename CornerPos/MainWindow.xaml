@@ -35,6 +35,8 @@
                             Content="&#x1F4B3;   Cashier" Click="Nav_Click"/>
                     <Button x:Name="NavProducts" Style="{StaticResource SidebarButton}" Tag="Products"
                             Content="&#x2615;   Products" Click="Nav_Click"/>
+                    <Button x:Name="NavTypes" Style="{StaticResource SidebarButton}" Tag="Product Types"
+                            Content="&#x1F3F7;   Product Types" Click="Nav_Click"/>
                     <Button x:Name="NavSales"    Style="{StaticResource SidebarButton}" Tag="Sales &amp; Reports"
                             Content="&#x1F4C8;   Sales &amp; Reports" Click="Nav_Click"/>
                     <Button x:Name="NavExpenses" Style="{StaticResource SidebarButton}" Tag="Expenses"

@@ -35,6 +35,7 @@ namespace CornerPos
             if (!isAdmin)
             {
                 NavProducts.Visibility = Visibility.Collapsed;
+                NavTypes.Visibility = Visibility.Collapsed;
                 NavSales.Visibility = Visibility.Collapsed;
                 NavExpenses.Visibility = Visibility.Collapsed;
                 NavUsers.Visibility = Visibility.Collapsed;
@@ -53,8 +54,9 @@ namespace CornerPos
             {
                 case "Cashier":         GoTo(page, "Take orders and manage the current shift"); break;
                 case "Products":        GoTo(page, "Manage the menu, prices and stock"); break;
+                case "Product Types":   GoTo(page, "Manage product categories"); break;
                 case "Sales & Reports": GoTo(page, "Daily, shift and monthly sales at a glance"); break;
-                case "Expenses":        GoTo(page, "Record and review shop expenses"); break;
+                case "Expenses":        GoTo(page, "Record and review monthly expenses"); break;
                 case "Users":           GoTo(page, "Manage staff logins and access"); break;
                 default:                GoTo(page, ""); break;
             }
@@ -65,14 +67,27 @@ namespace CornerPos
             PageTitle.Text = title;
             PageSubtitle.Text = subtitle;
 
-            if (title == "Cashier")
+            switch (title)
             {
-                if (_cashier == null) _cashier = new CashierView(_userId, _userName, _shift);
-                PageHost.Content = _cashier;
-            }
-            else
-            {
-                PageHost.Content = Placeholder(title);
+                case "Cashier":
+                    if (_cashier == null) _cashier = new CashierView(_userId, _userName, _shift);
+                    PageHost.Content = _cashier;
+                    break;
+                case "Products":
+                    PageHost.Content = new ProductsView();
+                    break;
+                case "Product Types":
+                    PageHost.Content = new ProductTypesView();
+                    break;
+                case "Users":
+                    PageHost.Content = new UsersView();
+                    break;
+                case "Expenses":
+                    PageHost.Content = new MonthlyExpensesView();
+                    break;
+                default:
+                    PageHost.Content = Placeholder(title);
+                    break;
             }
         }
 

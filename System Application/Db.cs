@@ -49,7 +49,7 @@ namespace Corner_Application
                 SQLiteConnection.CreateFile(DbPath);
             }
 
-            using (var conn = new SQLiteConnection(Program.Constring))
+            using (var conn = new SQLiteConnection(ConnectionString()))
             {
                 conn.Open();
 

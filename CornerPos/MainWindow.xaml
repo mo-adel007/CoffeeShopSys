@@ -1,0 +1,99 @@
+<Window x:Class="CornerPos.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Corner — Point of Sale" Width="1120" Height="720"
+        MinWidth="920" MinHeight="600"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource CreamBrush}"
+        FontFamily="{StaticResource AppFont}">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="248"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- ===== Sidebar ===== -->
+        <Border Grid.Column="0" Background="{StaticResource EspressoBrush}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Brand -->
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="22,26,0,26">
+                    <TextBlock Text="&#x2615;" FontSize="26" Foreground="{StaticResource CaramelBrush}"/>
+                    <TextBlock Text="Corner" FontSize="22" FontWeight="Bold" Foreground="White"
+                               VerticalAlignment="Center" Margin="10,0,0,0"/>
+                </StackPanel>
+
+                <!-- Navigation -->
+                <StackPanel Grid.Row="1" Margin="0,6,0,0">
+                    <Button x:Name="NavCashier"  Style="{StaticResource SidebarButton}" Tag="Cashier"
+                            Content="&#x1F4B3;   Cashier" Click="Nav_Click"/>
+                    <Button x:Name="NavProducts" Style="{StaticResource SidebarButton}" Tag="Products"
+                            Content="&#x2615;   Products" Click="Nav_Click"/>
+                    <Button x:Name="NavSales"    Style="{StaticResource SidebarButton}" Tag="Sales &amp; Reports"
+                            Content="&#x1F4C8;   Sales &amp; Reports" Click="Nav_Click"/>
+                    <Button x:Name="NavExpenses" Style="{StaticResource SidebarButton}" Tag="Expenses"
+                            Content="&#x1F4B0;   Expenses" Click="Nav_Click"/>
+                    <Button x:Name="NavUsers"    Style="{StaticResource SidebarButton}" Tag="Users"
+                            Content="&#x1F465;   Users" Click="Nav_Click"/>
+                </StackPanel>
+
+                <!-- User card + logout -->
+                <StackPanel Grid.Row="2" Margin="16,0,16,18">
+                    <Border Background="#33000000" CornerRadius="12" Padding="14,12">
+                        <StackPanel>
+                            <TextBlock x:Name="UserName" Text="User" Foreground="White"
+                                       FontWeight="SemiBold" FontSize="14"/>
+                            <TextBlock x:Name="UserRole" Text="Role" Foreground="{StaticResource CaramelBrush}"
+                                       FontSize="12" Margin="0,2,0,0"/>
+                        </StackPanel>
+                    </Border>
+                    <Button Content="Log out" Style="{StaticResource SidebarButton}" Margin="0,8,0,0"
+                            Click="Logout_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- ===== Main area ===== -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="78"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Border Grid.Row="0" Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}"
+                    BorderThickness="0,0,0,1">
+                <Grid Margin="28,0">
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock x:Name="PageTitle" Text="Cashier" FontSize="20" FontWeight="Bold"
+                                   Foreground="{StaticResource EspressoBrush}"/>
+                        <TextBlock x:Name="PageSubtitle" Text="Take orders and manage the current shift"
+                                   FontSize="12.5" Foreground="{StaticResource MutedBrush}" Margin="0,2,0,0"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Content -->
+            <Grid Grid.Row="1" Margin="28">
+                <Border Background="{StaticResource CardBrush}" CornerRadius="16"
+                        BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock x:Name="PageIcon" Text="&#x1F4B3;" FontSize="52" HorizontalAlignment="Center"
+                                   Foreground="{StaticResource CaramelBrush}"/>
+                        <TextBlock x:Name="PageBody" Text="Cashier screen" FontSize="18" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextBrush}" HorizontalAlignment="Center" Margin="0,14,0,0"/>
+                        <TextBlock Text="This screen is being rebuilt in the new modern interface."
+                                   FontSize="13" Foreground="{StaticResource MutedBrush}"
+                                   HorizontalAlignment="Center" Margin="0,6,0,0"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

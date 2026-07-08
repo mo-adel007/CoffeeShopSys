@@ -19,6 +19,7 @@ namespace CornerPos
         private readonly string _role;
         private readonly int _shift;
         private CashierView _cashier;
+        private string _mode = "cashier"; // "admin" or "cashier"
 
         public MainWindow(int userId, string userName, string role, int shift)
         {
@@ -32,17 +33,29 @@ namespace CornerPos
             bool isAdmin = string.Equals(_role, "admin", StringComparison.OrdinalIgnoreCase);
             UserRole.Text = isAdmin ? "Administrator" : "Cashier";
 
-            if (!isAdmin)
-            {
-                NavProducts.Visibility = Visibility.Collapsed;
-                NavTypes.Visibility = Visibility.Collapsed;
-                NavSales.Visibility = Visibility.Collapsed;
-                NavExpenses.Visibility = Visibility.Collapsed;
-                NavUsers.Visibility = Visibility.Collapsed;
-            }
+            // Admins land in Admin mode and can toggle to a focused Cashier view.
+            // Cashiers only ever see the Cashier-mode pages (no toggle).
+            ModeToggle.Visibility = isAdmin ? Visibility.Visible : Visibility.Collapsed;
+            SetMode(isAdmin ? "admin" : "cashier");
 
-            GoTo("Cashier", "Take orders and manage the current shift");
             SourceInitialized += (s, e) => TintTitleBar();
+        }
+
+        private void SetMode(string mode)
+        {
+            _mode = mode;
+            bool admin = mode == "admin";
+            AdminNav.Visibility = admin ? Visibility.Visible : Visibility.Collapsed;
+            CashierNav.Visibility = admin ? Visibility.Collapsed : Visibility.Visible;
+            ModeToggle.Content = admin ? "☕  Switch to Cashier" : "⚙  Switch to Admin";
+
+            if (admin) GoTo("Products", "Manage the menu, prices and stock");
+            else GoTo("Cashier", "Take orders and manage the current shift");
+        }
+
+        private void ModeToggle_Click(object sender, RoutedEventArgs e)
+        {
+            SetMode(_mode == "admin" ? "cashier" : "admin");
         }
 
         private void Nav_Click(object sender, RoutedEventArgs e)
@@ -53,11 +66,16 @@ namespace CornerPos
             switch (page)
             {
                 case "Cashier":         GoTo(page, "Take orders and manage the current shift"); break;
+                case "Daily Movement":  GoTo(page, "Record safe deposits, withdrawals and expenses"); break;
+                case "Close Shift":     GoTo(page, "Review and close the current shift"); break;
+                case "Close Day":       GoTo(page, "Review and close the day"); break;
+                case "Stock":           GoTo(page, "Restock products"); break;
                 case "Products":        GoTo(page, "Manage the menu, prices and stock"); break;
                 case "Product Types":   GoTo(page, "Manage product categories"); break;
                 case "Sales & Reports": GoTo(page, "Daily, shift and monthly sales at a glance"); break;
                 case "Expenses":        GoTo(page, "Record and review monthly expenses"); break;
                 case "Users":           GoTo(page, "Manage staff logins and access"); break;
+                case "Close Month":     GoTo(page, "Review and close the month"); break;
                 default:                GoTo(page, ""); break;
             }
         }

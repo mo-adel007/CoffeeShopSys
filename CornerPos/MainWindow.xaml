@@ -31,18 +31,34 @@
 
                 <!-- Navigation -->
                 <StackPanel Grid.Row="1" Margin="0,6,0,0">
-                    <Button x:Name="NavCashier"  Style="{StaticResource SidebarButton}" Tag="Cashier"
-                            Content="&#x1F4B3;   Cashier" Click="Nav_Click"/>
-                    <Button x:Name="NavProducts" Style="{StaticResource SidebarButton}" Tag="Products"
-                            Content="&#x2615;   Products" Click="Nav_Click"/>
-                    <Button x:Name="NavTypes" Style="{StaticResource SidebarButton}" Tag="Product Types"
-                            Content="&#x1F3F7;   Product Types" Click="Nav_Click"/>
-                    <Button x:Name="NavSales"    Style="{StaticResource SidebarButton}" Tag="Sales &amp; Reports"
-                            Content="&#x1F4C8;   Sales &amp; Reports" Click="Nav_Click"/>
-                    <Button x:Name="NavExpenses" Style="{StaticResource SidebarButton}" Tag="Expenses"
-                            Content="&#x1F4B0;   Expenses" Click="Nav_Click"/>
-                    <Button x:Name="NavUsers"    Style="{StaticResource SidebarButton}" Tag="Users"
-                            Content="&#x1F465;   Users" Click="Nav_Click"/>
+                    <!-- Cashier-mode pages (till + shift lifecycle) -->
+                    <StackPanel x:Name="CashierNav">
+                        <Button Style="{StaticResource SidebarButton}" Tag="Cashier"
+                                Content="&#x1F4B3;   Cashier" Click="Nav_Click"/>
+                        <Button Style="{StaticResource SidebarButton}" Tag="Daily Movement"
+                                Content="&#x1F501;   Daily Movement" Click="Nav_Click"/>
+                        <Button Style="{StaticResource SidebarButton}" Tag="Close Shift"
+                                Content="&#x1F9FE;   Close Shift" Click="Nav_Click"/>
+                        <Button Style="{StaticResource SidebarButton}" Tag="Close Day"
+                                Content="&#x1F4C5;   Close Day" Click="Nav_Click"/>
+                        <Button Style="{StaticResource SidebarButton}" Tag="Stock"
+                                Content="&#x1F4E6;   Stock" Click="Nav_Click"/>
+                    </StackPanel>
+                    <!-- Admin-mode pages (back-office) -->
+                    <StackPanel x:Name="AdminNav" Visibility="Collapsed">
+                        <Button Style="{StaticResource SidebarButton}" Tag="Products"
+                                Content="&#x2615;   Products" Click="Nav_Click"/>
+                        <Button Style="{StaticResource SidebarButton}" Tag="Product Types"
+                                Content="&#x1F3F7;   Product Types" Click="Nav_Click"/>
+                        <Button Style="{StaticResource SidebarButton}" Tag="Users"
+                                Content="&#x1F465;   Users" Click="Nav_Click"/>
+                        <Button Style="{StaticResource SidebarButton}" Tag="Expenses"
+                                Content="&#x1F4B0;   Monthly Expenses" Click="Nav_Click"/>
+                        <Button Style="{StaticResource SidebarButton}" Tag="Sales &amp; Reports"
+                                Content="&#x1F4C8;   Sales &amp; Reports" Click="Nav_Click"/>
+                        <Button Style="{StaticResource SidebarButton}" Tag="Close Month"
+                                Content="&#x1F5D3;   Close Month" Click="Nav_Click"/>
+                    </StackPanel>
                 </StackPanel>
 
                 <!-- User card + logout -->
@@ -72,12 +88,14 @@
             <Border Grid.Row="0" Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}"
                     BorderThickness="0,0,0,1">
                 <Grid Margin="28,0">
-                    <StackPanel VerticalAlignment="Center">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Left">
                         <TextBlock x:Name="PageTitle" Text="Cashier" FontSize="20" FontWeight="Bold"
                                    Foreground="{StaticResource EspressoBrush}"/>
                         <TextBlock x:Name="PageSubtitle" Text="Take orders and manage the current shift"
                                    FontSize="12.5" Foreground="{StaticResource MutedBrush}" Margin="0,2,0,0"/>
                     </StackPanel>
+                    <Button x:Name="ModeToggle" HorizontalAlignment="Right" VerticalAlignment="Center"
+                            Style="{StaticResource ChipButton}" Visibility="Collapsed" Click="ModeToggle_Click"/>
                 </Grid>
             </Border>
 
